@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Türkçe Companion</title>
+<style>
+body {
+  font-family: system-ui, sans-serif;
+  background: #f7f7fa;
+  margin: 0;
+  color: #222;
+}
+header {
+  background: #c8102e;
+  color: white;
+  padding: 24px;
+  text-align: center;
+}
+main {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  margin: 16px 0;
+  box-shadow: 0 3px 12px #0001;
+}
+button {
+  background: #c8102e;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 5px;
+}
+button:hover { opacity: .85; }
+textarea, input {
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>🇹🇷 Türkçe Companion</h1>
+  <p>あなたのトルコ語学習パートナー</p>
+</header>
+
+<main>
+  <div class="card">
+    <h2>今日のトルコ語</h2>
+    <p>毎日少しずつ、自然なトルコ語を身につけよう。</p>
+    <button onclick="showLesson()">今日の表現</button>
+    <p id="lesson"></p>
+  </div>
+
+  <div class="card">
+    <h2>瞬間作文</h2>
+    <p>私はトルコ語を勉強しています。</p>
+    <input id="answer" placeholder="トルコ語で入力">
+    <button onclick="checkAnswer()">答え合わせ</button>
+    <p id="result"></p>
+  </div>
+
+  <div class="card">
+    <h2>トルコ語の発音</h2>
+    <input id="speech" placeholder="読み上げたいトルコ語">
+    <button onclick="speak()">読み上げ</button>
+  </div>
+</main>
+
+<script>
+const lessons = [
+  ["Merhaba!", "こんにちは！"],
+  ["Nasılsın?", "元気？"],
+  ["Teşekkür ederim.", "ありがとう。"],
+  ["Ne yapıyorsun?", "何をしているの？"],
+  ["Çok güzel!", "とてもいいね！"]
+];
+
+function showLesson() {
+  const lesson = lessons[Math.floor(Math.random()*lessons.length)];
+  document.getElementById("lesson").textContent =
+    lesson[0] + " — " + lesson[1];
+}
+
+function checkAnswer() {
+  const answer = document.getElementById("answer").value.trim();
+  const result = document.getElementById("result");
+  if (answer.toLowerCase() === "türkçe öğreniyorum.") {
+    result.textContent = "正解！Tebrikler!";
+  } else {
+    result.textContent = "正解例：Türkçe öğreniyorum.";
+  }
+}
+
+function speak() {
+  const text = document.getElementById("speech").value;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "tr-TR";
+  utterance.rate = 0.85;
+  speechSynthesis.speak(utterance);
+}
+</script>
+</body>
+</html>
