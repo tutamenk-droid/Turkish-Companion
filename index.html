@@ -2,507 +2,165 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#c8102e">
 <title>Türkçe Companion</title>
 <style>
-:root{
-  --red:#c8102e; --red-dark:#a30d25; --red-soft:#fbeaee;
-  --ink:#222; --muted:#777; --bg:#f7f7fa; --card:#fff;
-  --radius:16px; --shadow:0 3px 12px #0001;
-  --green:#1d7a3a; --green-soft:#e8f6ec;
-  --blue:#155e9c;
-}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{
-  font-family:system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
-  background:var(--bg); color:var(--ink);
-  padding-bottom:calc(30px + env(safe-area-inset-bottom));
-}
-header{
-  background:var(--red); color:#fff; padding:20px 16px;
-  padding-top:calc(20px + env(safe-area-inset-top));
-  text-align:center; position:sticky; top:0; z-index:20;
-}
-header h1{font-size:22px}
-header p{font-size:13px;opacity:.9;margin-top:4px}
-main{max-width:800px;margin:auto;padding:12px 14px 20px}
-.card{
-  background:var(--card); padding:20px; border-radius:var(--radius);
-  margin:14px 0; box-shadow:var(--shadow);
-}
-.card h2{font-size:18px;margin-bottom:10px;color:var(--ink)}
-.card p.desc{font-size:13.5px;color:var(--muted);margin-bottom:12px;line-height:1.7}
-button{
-  background:var(--red); color:#fff; border:none; padding:12px 18px;
-  border-radius:10px; cursor:pointer; margin:5px 5px 5px 0;
-  font-size:15px; font-family:inherit; font-weight:700;
-}
-button:hover{opacity:.85}
-button:disabled{opacity:.4;cursor:default}
-button.ghost{background:#fff;color:var(--red);border:1.5px solid var(--red)}
-button.small{padding:8px 14px;font-size:13px}
-button.icon{width:40px;height:40px;padding:0;margin:0;border-radius:10px;font-size:17px;flex:none}
-textarea,input{
-  width:100%; padding:12px; box-sizing:border-box; border:1px solid #ddd;
-  border-radius:10px; font-size:16px; font-family:inherit; outline:none; background:#fff;
-}
-textarea:focus,input:focus{border-color:var(--red)}
-label{font-size:13px;font-weight:700;display:block;margin:12px 0 6px}
-label small{color:var(--muted);font-weight:400}
-/* タブ */
-nav.tabs{
-  display:flex; gap:4px; padding:10px 8px 2px; overflow-x:auto;
-  max-width:800px; margin:0 auto; -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
-}
+:root{--red:#c8102e;--dark:#a30d25;--soft:#fbeaee;--ink:#222;--muted:#777;--bg:#f7f7fa;--card:#fff;--green:#1d7a3a;--greenSoft:#e8f6ec;--blue:#155e9c;--radius:16px;--shadow:0 3px 12px #0001}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;background:var(--bg);color:var(--ink);padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+header{background:var(--red);color:#fff;text-align:center;padding:20px 16px;padding-top:calc(18px + env(safe-area-inset-top));position:sticky;top:0;z-index:10}
+header h1{font-size:22px}header p{font-size:13px;opacity:.9;margin-top:4px}
+nav.tabs{display:flex;gap:5px;padding:10px 8px 2px;overflow-x:auto;max-width:850px;margin:auto;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
-nav.tabs button{
-  flex:none; margin:0; background:#fff; color:var(--muted);
-  border:1.5px solid #eee; padding:10px 14px; font-size:13.5px; white-space:nowrap;
-}
-nav.tabs button.on{background:var(--red);color:#fff;border-color:var(--red)}
-.view{display:none}
-.view.on{display:block;animation:fade .18s ease}
-@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-/* チップ（レベル・カテゴリ・フィルタ） */
-.chips{display:flex;gap:6px;margin:6px 0 12px;flex-wrap:wrap}
-.chips button{margin:0;padding:9px 14px;font-size:13.5px;background:#fff;color:var(--muted);border:1.5px solid #eee}
-.chips button.on{background:var(--red);color:#fff;border-color:var(--red)}
-/* 単語帳・表現集カード */
-.word-item{background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:10px}
-.word-head{display:flex;align-items:center;gap:10px}
-.word-head .tr{font-size:17px;font-weight:700;flex:1;word-break:break-word}
-.word-head .jp{font-size:14px;color:var(--ink);margin-top:2px}
-.word-head .star{border:none;background:none;font-size:20px;padding:4px;color:#c9b0b4}
-.word-head .star.on{color:var(--red)}
-.wbtn{border:1.5px solid #eee;background:#fff;color:var(--muted)}
-.wbtn.on{background:var(--green-soft);color:var(--green);border-color:var(--green)}
-.word-ex{margin-top:8px;font-size:13.5px;color:var(--muted);line-height:1.7;border-top:1px dashed #eee;padding-top:8px}
-.word-ex b{color:var(--ink)}
-.lvl-tag{display:inline-block;background:var(--red-soft);color:var(--red-dark);font-size:11px;font-weight:800;border-radius:8px;padding:3px 8px;margin-right:8px;vertical-align:middle}
-.note{margin-top:8px;font-size:13px;color:var(--blue);line-height:1.7}
-/* 文法 */
-details.lesson{background:#fff;border-radius:12px;box-shadow:var(--shadow);margin-bottom:10px;overflow:hidden}
-details.lesson summary{
-  list-style:none;cursor:pointer;padding:15px 16px;font-weight:700;font-size:15px;
-  display:flex;align-items:center;gap:8px;
-}
-details.lesson summary::-webkit-details-marker{display:none}
-details.lesson summary::after{content:"▾";margin-left:auto;color:var(--muted)}
-details.lesson[open] summary::after{content:"▴"}
-details.lesson .body{padding:0 16px 16px;border-top:1px solid #f2e8e8}
-.lesson .exp{font-size:14px;line-height:1.9;margin:12px 0}
-.lesson .exp b{color:var(--red-dark)}
-.lesson .ex-line{font-size:13.5px;line-height:1.7;color:var(--muted);margin-bottom:6px}
-.lesson .ex-line b{color:var(--ink);font-size:14.5px}
-.gq{margin-top:14px;background:var(--bg);border-radius:12px;padding:13px}
-.gq .q{font-size:14px;font-weight:700;margin-bottom:8px;line-height:1.6}
-.gq .opts{display:flex;flex-direction:column;gap:6px}
-.gq .opts button{margin:0;text-align:left;background:#fff;color:var(--ink);border:1.5px solid #eee;font-weight:400;font-size:14px}
-.gq .opts button.ok{background:var(--green-soft);color:var(--green);border-color:var(--green);font-weight:700}
-.gq .opts button.ng{background:#fdeaea;color:var(--red-dark);border-color:var(--red)}
-.gq .expl{display:none;margin-top:8px;font-size:13px;color:var(--ink);line-height:1.8;background:var(--green-soft);border-radius:8px;padding:8px 10px}
-.gq .expl.show{display:block}
-/* クイズ */
-.quiz-q{font-size:16.5px;font-weight:700;line-height:1.7;margin:8px 0 14px;word-break:break-word}
-.quiz-opts{display:flex;flex-direction:column;gap:8px}
-.quiz-opts button{margin:0;text-align:left;font-weight:400;font-size:15px;background:#fff;color:var(--ink);border:1.5px solid #eee}
-.quiz-opts button.ok{background:var(--green-soft);color:var(--green);border-color:var(--green);font-weight:700}
-.quiz-opts button.ng{background:#fdeaea;color:var(--red-dark);border-color:var(--red)}
-.quiz-result{margin-top:12px;font-size:14px;line-height:1.8;display:none;border-radius:10px;padding:10px 12px}
-.quiz-result.ok{display:block;background:var(--green-soft);color:var(--green)}
-.quiz-result.ng{display:block;background:#fdeaea;color:var(--red-dark)}
-.quiz-result .expl{color:var(--ink);font-size:13.5px;margin-top:4px}
-.prog{font-size:12.5px;color:var(--muted);margin-bottom:4px}
-/* 発音 */
-.tts-status{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.7}
-.tts-status.ok{color:var(--green)}
-/* 統計 */
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat-box{background:var(--red-soft);border-radius:14px;padding:18px 10px;text-align:center}
-.stat-box .n{font-size:26px;font-weight:800;color:var(--red)}
-.stat-box .l{font-size:12px;color:var(--muted);margin-top:4px}
-/* ChatGPT */
-.prompt-box{background:var(--bg);border:1px solid #eee;border-radius:12px;padding:12px;font-size:13px;line-height:1.8;white-space:pre-wrap;word-break:break-word;margin-top:8px}
-.notice{background:#fff;border:1.5px solid var(--red);border-radius:12px;padding:14px;font-size:13.5px;line-height:1.8;margin-bottom:12px}
-.notice b{color:var(--red)}
-.empty{text-align:center;color:var(--muted);font-size:13.5px;padding:22px 8px;line-height:1.9}
-.status-ok{color:var(--green);font-size:13px;font-weight:700}
-.row{display:flex;gap:8px;align-items:flex-end}
-.row input,.row textarea{flex:1}
-@media (min-width:768px){
-  main{padding:20px}
-  header h1{font-size:26px}
-  .stat-grid{grid-template-columns:repeat(4,1fr)}
-}
+button{font:700 14px inherit;font-family:inherit;background:var(--red);color:white;border:0;padding:11px 15px;border-radius:10px;cursor:pointer;margin:4px}
+button:disabled{opacity:.45}button.ghost{background:white;color:var(--red);border:1px solid var(--red)}button.small{padding:8px 12px;font-size:12px}
+nav.tabs button{flex:none;margin:0;background:#fff;color:var(--muted);border:1px solid #eee;padding:10px 13px;font-size:13px;white-space:nowrap}
+nav.tabs button.on,.chips button.on{background:var(--red);color:white;border-color:var(--red)}
+main{max-width:850px;margin:auto;padding:12px}
+.view{display:none}.view.on{display:block;animation:fade .15s}@keyframes fade{from{opacity:.4;transform:translateY(3px)}to{opacity:1;transform:none}}
+.card,.word-item,details.lesson{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin:12px 0}
+.card{padding:18px}.card h2{font-size:18px;margin-bottom:9px}.desc{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px}
+input,textarea,select{font:16px inherit;font-family:inherit;width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;background:#fff;outline:none;margin:5px 0}
+input:focus,textarea:focus,select:focus{border-color:var(--red)}
+label{display:block;font-size:13px;font-weight:700;margin:12px 0 5px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}
+.chips button{margin:0;background:white;color:var(--muted);border:1px solid #eee;padding:8px 12px;font-size:13px}
+.word-item{padding:14px;margin-bottom:9px;border-radius:12px}
+.word-head{display:flex;align-items:center;gap:8px}.word-head .tr{font-size:17px;font-weight:750;flex:1;overflow-wrap:anywhere}.jp{font-size:14px;margin-top:3px}
+.star{background:none;color:#c9b0b4;padding:3px;font-size:20px;margin:0}.star.on{color:var(--red)}
+.word-ex{border-top:1px dashed #eee;margin-top:8px;padding-top:8px;font-size:13px;color:var(--muted);line-height:1.7}
+.tag{display:inline-block;background:var(--soft);color:var(--dark);font-size:11px;padding:3px 7px;border-radius:7px;margin-right:7px}
+.note{font-size:13px;color:var(--blue);line-height:1.7;margin-top:7px}
+details.lesson{overflow:hidden;margin-bottom:9px;border-radius:12px}
+details.lesson summary{list-style:none;padding:15px;cursor:pointer;font-weight:700}details.lesson summary::-webkit-details-marker{display:none}
+details.lesson summary:after{content:"＋";float:right;color:var(--muted)}details.lesson[open] summary:after{content:"−"}
+.lesson-body{padding:0 15px 15px;border-top:1px solid #eee;line-height:1.8;font-size:14px}
+.exline{background:#fafafa;padding:8px;border-radius:8px;margin:7px 0;font-size:13px}
+.question{background:#f7f7fa;border-radius:12px;padding:12px;margin-top:12px}
+.question p{font-weight:700;line-height:1.6;margin-bottom:8px}
+.options{display:grid;gap:7px}.options button{background:white;color:var(--ink);border:1px solid #ddd;text-align:left;font-weight:400;margin:0}
+.options button.correct{background:var(--greenSoft);border-color:var(--green);color:var(--green)}.options button.wrong{background:#fdeaea;border-color:var(--red);color:var(--dark)}
+.feedback{font-size:13px;line-height:1.7;margin-top:8px;padding:8px;border-radius:8px;background:var(--greenSoft);display:none}.feedback.show{display:block}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.stat-box{background:var(--soft);border-radius:12px;text-align:center;padding:17px 8px}.stat-box strong{display:block;font-size:25px;color:var(--red)}.stat-box span{font-size:12px;color:var(--muted)}
+.prompt{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);padding:12px;border-radius:10px;font-size:13px;line-height:1.7;margin:8px 0}
+.empty{text-align:center;color:var(--muted);padding:20px;font-size:13px}.status{font-size:13px;color:var(--green);margin-left:5px}
+@media(min-width:700px){main{padding:20px}.stat-grid{grid-template-columns:repeat(4,1fr)}header h1{font-size:26px}}
 </style>
 </head>
 <body>
-
-<header>
-  <h1>🇹🇷 Türkçe Companion</h1>
-  <p>あなたのトルコ語学習パートナー</p>
-</header>
-
-<nav class="tabs">
-  <button class="tab on" data-v="home">ホーム</button>
-  <button class="tab" data-v="vocab">単語帳</button>
-  <button class="tab" data-v="grammar">文法</button>
-  <button class="tab" data-v="phrase">表現集</button>
-  <button class="tab" data-v="tts">発音練習</button>
-  <button class="tab" data-v="quiz">練習</button>
-  <button class="tab" data-v="stats">学習記録</button>
-  <button class="tab" data-v="gpt">ChatGPT</button>
+<header><h1>🇹🇷 Türkçe Companion</h1><p>あなたのトルコ語学習パートナー</p></header>
+<nav class="tabs" id="tabs">
+<button class="on" data-view="home">ホーム</button><button data-view="vocab">単語帳</button><button data-view="grammar">文法</button><button data-view="phrase">表現集</button><button data-view="tts">発音</button><button data-view="quiz">練習</button><button data-view="stats">記録</button><button data-view="gpt">ChatGPT</button>
 </nav>
-
 <main>
-  <!-- ============ ホーム（既存機能を維持） ============ -->
-  <section class="view on" id="v-home">
-    <div class="card">
-      <h2>今日のトルコ語</h2>
-      <p class="desc">毎日少しずつ、自然なトルコ語を身につけよう。</p>
-      <button onclick="showLesson()">今日の表現</button>
-      <p id="lesson"></p>
-    </div>
-
-    <div class="card">
-      <h2>瞬間作文</h2>
-      <p class="desc">私はトルコ語を勉強しています。</p>
-      <input id="answer" placeholder="トルコ語で入力">
-      <button onclick="checkAnswer()">答え合わせ</button>
-      <p id="result"></p>
-    </div>
-
-    <div class="card">
-      <h2>トルコ語の発音</h2>
-      <p class="desc">入力したトルコ語を読み上げます。</p>
-      <input id="speech" placeholder="読み上げたいトルコ語">
-      <button onclick="speak()">読み上げ</button>
-    </div>
-
-    <div class="card">
-      <h2>学習メニュー</h2>
-      <p class="desc">このアプリは完全オフラインで動作します（AI送信・API課金は一切なし）。</p>
-      <div class="chips">
-        <button onclick="switchView('vocab')">📚 単語帳</button>
-        <button onclick="switchView('grammar')">📐 文法</button>
-        <button onclick="switchView('phrase')">💬 表現集</button>
-        <button onclick="switchView('quiz')">✏️ 練習</button>
-        <button onclick="switchView('gpt')">🤖 ChatGPT連携</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ 単語帳 ============ -->
-  <section class="view" id="v-vocab">
-    <div class="card">
-      <h2>単語帳</h2>
-      <p class="desc">レベル別の単語を学習します。★でお気に入り、✔で学習済みを記録できます。</p>
-      <div class="chips" id="vocabLevels"></div>
-      <div class="chips" id="vocabFilters"></div>
-      <input id="vocabSearch" placeholder="トルコ語・日本語で検索">
-      <div id="vocabList" style="margin-top:12px"></div>
-    </div>
-  </section>
-
-  <!-- ============ 文法 ============ -->
-  <section class="view" id="v-grammar">
-    <div class="card">
-      <h2>文法学習</h2>
-      <p class="desc">初級から中級まで、段階的に学べます。各レッスンに確認問題が付いています。</p>
-      <div id="grammarList"></div>
-    </div>
-  </section>
-
-  <!-- ============ 表現集 ============ -->
-  <section class="view" id="v-phrase">
-    <div class="card">
-      <h2>翻訳・表現集</h2>
-      <p class="desc">日本語・トルコ語の両方向から検索できます。</p>
-      <div class="chips" id="phraseCats"></div>
-      <input id="phraseSearch" placeholder="例: ありがとう / teşekkür / 病院">
-      <div id="phraseList" style="margin-top:12px"></div>
-    </div>
-  </section>
-
-  <!-- ============ 発音練習 ============ -->
-  <section class="view" id="v-tts">
-    <div class="card">
-      <h2>発音練習</h2>
-      <p class="desc">ブラウザ標準の音声読み上げ（Speech Synthesis）で発音を確認します。APIや有料サービスは使いません。</p>
-      <input id="ttsInput" placeholder="読み上げたいトルコ語（例: Merhaba! Nasılsın?）">
-      <button id="btnTts" style="margin-top:12px">🔊 読み上げ</button>
-      <div class="tts-status" id="ttsStatus"></div>
-      <h2 style="margin-top:22px;font-size:15px">よく使う表現</h2>
-      <div class="chips" id="ttsPresets"></div>
-    </div>
-  </section>
-
-  <!-- ============ 練習問題 ============ -->
-  <section class="view" id="v-quiz">
-    <div class="card">
-      <h2>練習問題</h2>
-      <div class="chips" id="quizTabs">
-        <button data-q="word" class="on">単語クイズ</button>
-        <button data-q="gram">文法選択</button>
-        <button data-q="write">作文（日→土）</button>
-      </div>
-      <div id="quizBody"></div>
-    </div>
-  </section>
-
-  <!-- ============ 学習記録 ============ -->
-  <section class="view" id="v-stats">
-    <div class="card">
-      <h2>学習記録</h2>
-      <p class="desc">記録はこの端末のブラウザ（localStorage）にのみ保存されます。</p>
-      <div class="stat-grid" id="statGrid"></div>
-      <div style="margin-top:16px"><button class="ghost small" id="btnResetStats">学習記録をリセット</button></div>
-    </div>
-  </section>
-
-  <!-- ============ ChatGPT連携 ============ -->
-  <section class="view" id="v-gpt">
-    <div class="card">
-      <h2>ChatGPT連携</h2>
-      <p class="desc">
-        このアプリはAI APIを呼び出しません（課金なし・キー不要）。下のプロンプトをコピーして、ChatGPTに貼り付けるだけでAI会話・添削ができます。
-      </p>
-      <label>会話レベル <small>（プロンプトに反映されます）</small></label>
-      <div class="chips" id="gptLevels"></div>
-
-      <h2 style="font-size:15px;margin-top:16px">1. トルコ語会話練習用プロンプト</h2>
-      <div class="prompt-box" id="gptPrompt1"></div>
-      <button class="small" id="btnCopy1" style="margin-top:8px">📋 プロンプトをコピー</button>
-      <span id="copyMsg1" class="status-ok" style="display:none;margin-left:8px">コピーしました</span>
-
-      <h2 style="font-size:15px;margin-top:20px">2. 文添削用プロンプト</h2>
-      <div class="prompt-box" id="gptPrompt2"></div>
-      <button class="small" id="btnCopy2" style="margin-top:8px">📋 プロンプトをコピー</button>
-      <span id="copyMsg2" class="status-ok" style="display:none;margin-left:8px">コピーしました</span>
-
-      <div style="margin-top:20px">
-        <button id="btnOpenGpt">🤖 ChatGPTを開く</button>
-        <span style="font-size:12px;color:var(--muted)">（chatgpt.com が新しいタブで開きます）</span>
-      </div>
-    </div>
-  </section>
+<section class="view on" id="home">
+<div class="card"><h2>今日のトルコ語</h2><p class="desc">毎日ひとつ、自然な表現を身につけよう。</p><button id="dailyBtn">今日の表現を見る</button><p id="daily" style="margin-top:10px;line-height:1.7"></p></div>
+<div class="card"><h2>瞬間作文</h2><p class="desc" id="instantJP">私はトルコ語を勉強しています。</p><input id="instantAnswer" placeholder="トルコ語で入力"><button id="instantCheck">答え合わせ</button><p id="instantResult" class="note"></p></div>
+<div class="card"><h2>学習メニュー</h2><p class="desc">単語・文法・クイズ・発音をまとめて学習できます。</p><div class="chips"><button data-go="vocab">📚 単語帳</button><button data-go="grammar">📐 文法</button><button data-go="phrase">💬 表現集</button><button data-go="quiz">✏️ 練習</button><button data-go="gpt">🤖 ChatGPT</button></div></div>
+</section>
+<section class="view" id="vocab"><div class="card"><h2>単語帳</h2><p class="desc">レベル・検索・お気に入りで絞り込み。✔で学習済みにできます。</p><div class="chips" id="levels"></div><div class="chips" id="vfilters"></div><input id="vsearch" placeholder="トルコ語・日本語で検索"><div id="vlist"></div></div></section>
+<section class="view" id="grammar"><div class="card"><h2>文法学習</h2><p class="desc">レッスンを開き、解説と確認問題を確認しましょう。</p><div id="glist"></div></div></section>
+<section class="view" id="phrase"><div class="card"><h2>表現集</h2><p class="desc">日本語・トルコ語の両方から検索できます。</p><div class="chips" id="pcats"></div><input id="psearch" placeholder="例：ありがとう / teşekkür / 病院"><div id="plist"></div></div></section>
+<section class="view" id="tts"><div class="card"><h2>発音練習</h2><p class="desc">端末・ブラウザに搭載された音声で読み上げます。トルコ語音声がない場合は設定から追加してください。</p><input id="ttsInput" placeholder="Merhaba! Nasılsın?"><button id="ttsBtn">🔊 読み上げ</button><p id="ttsStatus" class="note"></p><h3 style="margin-top:18px">よく使う表現</h3><div class="chips" id="ttsPresets"></div></div></section>
+<section class="view" id="quiz"><div class="card"><h2>練習問題</h2><div class="chips" id="qTabs"><button class="on" data-type="word">単語</button><button data-type="gram">文法</button><button data-type="write">作文（日→土）</button></div><div id="qbody"></div></div></section>
+<section class="view" id="stats"><div class="card"><h2>学習記録</h2><p class="desc">記録はこのブラウザ内に保存されます。</p><div class="stat-grid" id="statgrid"></div><button class="ghost small" id="reset">記録をリセット</button></div></section>
+<section class="view" id="gpt"><div class="card"><h2>ChatGPT連携</h2><p class="desc">APIは使用しません。プロンプトをコピーしてChatGPTに貼り付けます。</p><label>会話レベル</label><div class="chips" id="glevels"></div><h3>会話練習プロンプト</h3><div class="prompt" id="gp1"></div><button id="copy1">📋 コピー</button><span class="status" id="copied1"></span><h3 style="margin-top:18px">文添削プロンプト</h3><div class="prompt" id="gp2"></div><button id="copy2">📋 コピー</button><span class="status" id="copied2"></span><p style="margin-top:15px"><button id="openGPT">🤖 ChatGPTを開く</button></p></div></section>
 </main>
-
 <script>
 "use strict";
-/* ============================================================
-   Türkçe Companion — 完全オフライン版
-   ・外部API送信なし（OpenAI / Worker / 有料サービス不使用）
-   ・全コンテンツをアプリ内データとして収録
-   ・学習記録は localStorage 単一キーで管理
-   モジュール: Store / TTS / Vocab / Grammar / Phrase / TtsView /
-               Quiz / StatsView / GPT / App
-============================================================ */
-
-/* ---------- 既存機能（元サイトからそのまま維持） ---------- */
-const lessons = [
-  ["Merhaba!", "こんにちは！"],
-  ["Nasılsın?", "元気？"],
-  ["Teşekkür ederim.", "ありがとう。"],
-  ["Ne yapıyorsun?", "何をしているの？"],
-  ["Çok güzel!", "とてもいいね！"]
-];
-
-function showLesson() {
-  const lesson = lessons[Math.floor(Math.random()*lessons.length)];
-  document.getElementById("lesson").textContent =
-    lesson[0] + " — " + lesson[1];
-}
-
-function checkAnswer() {
-  const answer = document.getElementById("answer").value.trim();
-  const result = document.getElementById("result");
-  if (answer.toLowerCase() === "türkçe öğreniyorum.") {
-    result.textContent = "正解！Tebrikler!";
-  } else {
-    result.textContent = "正解例：Türkçe öğreniyorum.";
-  }
-}
-
-/* ---------- 検索・比較ユーティリティ（トルコ語ロケール対応） ---------- */
-const normTr = s => String(s || "").toLocaleLowerCase("tr");
-const normJp = s => String(s || "").normalize("NFKC")
-  .replace(/[\u30A1-\u30F6]/g, m => String.fromCharCode(m.charCodeAt(0) - 0x60)); // カタカナ→ひらがな
-const cleanTr = s => normTr(s).replace(/[.!?,:;'"()\s、。？！]/g, "");
-
-/* ---------- Store: 単一キー・バージョン付き localStorage ---------- */
-const Store = {
-  KEY: "tc_data",
-  d: null,
-  load(){
-    try{ this.d = JSON.parse(localStorage.getItem(this.KEY)); }catch(e){ this.d = null; }
-    if(!this.d || this.d.v !== 1){
-      this.d = { v:1, fav:[], learned:[], ans:{ok:0,ng:0}, days:[], write:[], level:"A1" };
-    }
-    return this.d;
-  },
-  save(){ localStorage.setItem(this.KEY, JSON.stringify(this.d)); },
-  markDay(){
-    const t = new Date().toISOString().slice(0,10);
-    if(!this.d.days.includes(t)){ this.d.days.push(t); this.save(); }
-  },
-  toggle(arrName, val){
-    const arr = this.d[arrName];
-    const i = arr.indexOf(val);
-    if(i >= 0) arr.splice(i,1); else arr.push(val);
-    this.save();
-  },
-  answer(ok){
-    ok ? this.d.ans.ok++ : this.d.ans.ng++;
-    this.save();
-  }
+const $=id=>document.getElementById(id);
+const data={
+fav:[],learned:[],ok:0,ng:0,days:[],level:"A1",qtype:"word",qindex:0,qscore:0,qanswered:false,phraseCat:"すべて",vfilter:"すべて"
 };
-
-/* ---------- TTS: iOS Safari対応（ユーザー操作起点・voiceschanged） ---------- */
-const TTS = {
-  voice: null, checked: false,
-  init(){
-    if(!("speechSynthesis" in window)){ this.checked = true; return; }
-    const load = () => {
-      const vs = speechSynthesis.getVoices();
-      this.voice = vs.find(v => /^tr(-|_)TR$/i.test(v.lang))
-                || vs.find(v => /^tr/i.test(v.lang)) || null;
-      this.checked = true;
-      document.dispatchEvent(new CustomEvent("tts-ready"));
-    };
-    if("onvoiceschanged" in speechSynthesis) speechSynthesis.onvoiceschanged = load;
-    load(); // 一部ブラウザは即時取得のみ
-  },
-  statusText(){
-    if(!("speechSynthesis" in window)) return "このブラウザは音声読み上げに対応していません。";
-    if(this.voice) return "✅ トルコ語音声を使用します: " + this.voice.name;
-    return "⚠️ トルコ語の音声ボイスが見つかりません。iPadの「設定 → アクセシビリティ → 読み上げコンテンツ → 声」でトルコ語の声を追加すると読み上げできるようになります。";
-  },
-  speak(text){
-    // 必ずユーザーのタップから呼ばれること（iOSの制約）
-    if(!("speechSynthesis" in window)){ alert("このブラウザは音声読み上げに対応していません。"); return; }
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    if(this.voice) u.voice = this.voice;
-    u.lang = "tr-TR";
-    u.rate = 0.85;
-    speechSynthesis.speak(u);
-  }
-};
-
-/* ---------- 収録データ（アプリ内完結・API不要） ---------- */
-const VOCAB = [
-  // ---- A1 ----
-  { lvl:"A1", tr:"ev", jp:"家", ex:"Benim evim çok güzel.", exjp:"私の家はとてもきれいです。" },
-  { lvl:"A1", tr:"okul", jp:"学校", ex:"Çocuklar okula gidiyor.", exjp:"子どもたちは学校へ行きます。" },
-  { lvl:"A1", tr:"su", jp:"水", ex:"Bir bardak su istiyorum.", exjp:"コップ1杯の水が欲しいです。" },
-  { lvl:"A1", tr:"ekmek", jp:"パン", ex:"Her sabah ekmek alırım.", exjp:"毎朝パンを買います。" },
-  { lvl:"A1", tr:"çay", jp:"茶", ex:"Bir çay lütfen.", exjp:"お茶を一杯ください。" },
-  { lvl:"A1", tr:"kahve", jp:"コーヒー", ex:"Türk kahvesi çok ünlüdür.", exjp:"トルココーヒーはとても有名です。" },
-  { lvl:"A1", tr:"süt", jp:"牛乳", ex:"Kahveye süt koyar mısın?", exjp:"コーヒーにミルクを入れてくれますか。" },
-  { lvl:"A1", tr:"elma", jp:"りんご", ex:"Her sabah bir elma yerim.", exjp:"毎朝りんごを1個食べます。" },
-  { lvl:"A1", tr:"kitap", jp:"本", ex:"Bu kitap çok ilginç.", exjp:"この本はとても面白いです。" },
-  { lvl:"A1", tr:"arkadaş", jp:"友達", ex:"Arkadaşım ile sinemaya gidiyoruz.", exjp:"友達と一緒に映画館へ行きます。" },
-  { lvl:"A1", tr:"anne", jp:"母", ex:"Annem yemek yapıyor.", exjp:"母は料理を作っています。" },
-  { lvl:"A1", tr:"baba", jp:"父", ex:"Babam öğretmendir.", exjp:"父は教師です。" },
-  { lvl:"A1", tr:"öğretmen", jp:"教師", ex:"O, iyi bir öğretmen.", exjp:"彼はいい教師です。" },
-  { lvl:"A1", tr:"öğrenci", jp:"学生", ex:"Ben üniversitede öğrenciyim.", exjp:"私は大学の学生です。" },
-  { lvl:"A1", tr:"yemek", jp:"料理・食事", ex:"Türk yemeği çok lezzetli.", exjp:"トルコ料理はとてもおいしいです。" },
-  { lvl:"A1", tr:"güzel", jp:"きれいな・良い", ex:"Hava bugün çok güzel.", exjp:"今日はとてもいい天気です。" },
-  { lvl:"A1", tr:"büyük", jp:"大きい", ex:"Bu şehir çok büyük.", exjp:"この街はとても大きいです。" },
-  { lvl:"A1", tr:"küçük", jp:"小さい", ex:"Küçük bir dükkân arıyoruz.", exjp:"小さな店を探しています。" },
-  { lvl:"A1", tr:"yeni", jp:"新しい", ex:"Yeni bir telefon aldım.", exjp:"新しい携帯を買いました。" },
-  { lvl:"A1", tr:"eski", jp:"古い", ex:"Eski bir araba sürüyorum.", exjp:"古い車に乗っています。" },
-  { lvl:"A1", tr:"gitmek", jp:"行く", ex:"Yarın İstanbul'a gidiyoruz.", exjp:"明日イスタンブールへ行きます。" },
-  { lvl:"A1", tr:"gelmek", jp:"来る", ex:"Akşam bize gel.", exjp:"夕方私たちのところへ来て。" },
-  { lvl:"A1", tr:"sevmek", jp:"好き・愛する", ex:"Ben Türkçeyi çok seviyorum.", exjp:"私はトルコ語が大好きです。" },
-  { lvl:"A1", tr:"yapmak", jp:"する・作る", ex:"Ne yapıyorsun?", exjp:"何をしていますか。" },
-  { lvl:"A1", tr:"sabah", jp:"朝", ex:"Sabah erken kalkıyorum.", exjp:"朝は早く起きます。" },
-  { lvl:"A1", tr:"akşam", jp:"夕方・晩", ex:"Akşam yemeği hazır.", exjp:"夕食の用意ができました。" },
-  { lvl:"A1", tr:"gece", jp:"夜", ex:"Dün gece film izledim.", exjp:"昨夜は映画を見ました。" },
-  { lvl:"A1", tr:"gün", jp:"日", ex:"İyi günler!", exjp:"よい一日を！" },
-  { lvl:"A1", tr:"bugün", jp:"今日", ex:"Bugün hava yağmurlu.", exjp:"今日は雨です。" },
-  { lvl:"A1", tr:"yarın", jp:"明日", ex:"Yarın görüşürüz.", exjp:"また明日。" },
-  { lvl:"A1", tr:"araba", jp:"車", ex:"Arabam yok, otobüsle gidiyorum.", exjp:"車がないのでバスで行きます。" },
-  { lvl:"A1", tr:"oda", jp:"部屋", ex:"Odam çok aydınlık.", exjp:"私の部屋はとても明るいです。" },
-  { lvl:"A1", tr:"saat", jp:"時計・時間", ex:"Saat kaç?", exjp:"今何時ですか。" },
-  { lvl:"A1", tr:"para", jp:"お金", ex:"Param yok.", exjp:"お金がありません。" },
-  { lvl:"A1", tr:"iş", jp:"仕事", ex:"İşim çok yoğun.", exjp:"仕事がとても忙しいです。" },
-  // ---- A2 ----
-  { lvl:"A2", tr:"konuşmak", jp:"話す", ex:"Türkçe biraz konuşuyorum.", exjp:"少しだけトルコ語を話します。" },
-  { lvl:"A2", tr:"anlamak", jp:"理解する", ex:"Anlamıyorum, tekrar eder misin?", exjp:"分かりません、もう一度言ってもらえますか。" },
-  { lvl:"A2", tr:"çalışmak", jp:"勉強する・働く", ex:"Her gün Türkçe çalışıyorum.", exjp:"毎日トルコ語を勉強しています。" },
-  { lvl:"A2", tr:"beklemek", jp:"待つ", ex:"Otobüs bekliyorum.", exjp:"バスを待っています。" },
-  { lvl:"A2", tr:"bulmak", jp:"見つける", ex:"Anahtarımı bulamıyorum.", exjp:"鍵が見つかりません。" },
-  { lvl:"A2", tr:"soru", jp:"質問", ex:"Bir sorum var.", exjp:"質問があります。" },
-  { lvl:"A2", tr:"cevap", jp:"答え", ex:"Bu sorunun cevabını bilmiyorum.", exjp:"この質問の答えが分かりません。" },
-  { lvl:"A2", tr:"hastane", jp:"病院", ex:"Hastane nerede?", exjp:"病院はどこですか。" },
-  { lvl:"A2", tr:"ilaç", jp:"薬", ex:"Bu ilacı yemekten sonra al.", exjp:"この薬は食後に飲んでください。" },
-  { lvl:"A2", tr:"otobüs", jp:"バス", ex:"Otobüs durağı uzak mı?", exjp:"バス停は遠いですか。" },
-  { lvl:"A2", tr:"tren", jp:"列車", ex:"Tren saat dokuzda kalkıyor.", exjp:"列車は9時に出発します。" },
-  { lvl:"A2", tr:"uçak", jp:"飛行機", ex:"Uçakla gitmek daha hızlı.", exjp:"飛行機で行く方が速いです。" },
-  { lvl:"A2", tr:"tatil", jp:"休暇", ex:"Yazın tatile gideceğiz.", exjp:"夏に休暇へ行く予定です。" },
-  { lvl:"A2", tr:"hava", jp:"天気・空気", ex:"Yarın hava yağmurlu olacak.", exjp:"明日は雨になるでしょう。" },
-  { lvl:"A2", tr:"yaz", jp:"夏", ex:"Yazın denize gireriz.", exjp:"夏には海に入ります。" },
-  { lvl:"A2", tr:"kış", jp:"冬", ex:"Kışın kar yağıyor.", exjp:"冬には雪が降ります。" },
-  // ---- B1 ----
-  { lvl:"B1", tr:"karar", jp:"決断・決定", ex:"Karar verdim, bu yıl Türkçeyi ilerleteceğim.", exjp:"決めました、今年はトルコ語を上達させます。" },
-  { lvl:"B1", tr:"fırsat", jp:"機会", ex:"Bu fırsatı kaçırmak istemiyorum.", exjp:"この機会を逃したくありません。" },
-  { lvl:"B1", tr:"alışmak", jp:"慣れる", ex:"Yeni şehre yavaş yavaş alışıyorum.", exjp:"新しい街に少しずつ慣れています。" },
-  { lvl:"B1", tr:"başarmak", jp:"成し遂げる", ex:"Çalışırsan bu sınavı başarırsın.", exjp:"努力すればその試験に合格できます。" },
-  { lvl:"B1", tr:"deneyim", jp:"経験", ex:"Yurt dışında çalışma deneyimim var.", exjp:"海外で働いた経験があります。" },
-  { lvl:"B1", tr:"etkilemek", jp:"影響を与える", ex:"Bu haber beni çok etkiledi.", exjp:"このニュースにとても心を動かされました。" },
-  { lvl:"B1", tr:"gelişim", jp:"成長・上達", ex:"Türkçemde büyük bir gelişim var.", exjp:"私のトルコ語は大きく上達しました。" },
-  { lvl:"B1", tr:"olasılık", jp:"可能性", ex:"Yağmur olasılığı yüksek görünüyor.", exjp:"雨の可能性が高そうです。" },
-  // ---- B2 ----
-  { lvl:"B2", tr:"varsayım", jp:"仮定", ex:"Bu sadece bir varsayımdır.", exjp:"これは単なる仮定にすぎません。" },
-  { lvl:"B2", tr:"kanıt", jp:"証拠", ex:"Bu iddiayı destekleyecek kanıt yok.", exjp:"この主張を裏付ける証拠はありません。" },
-  { lvl:"B2", tr:"katkı", jp:"貢献", ex:"Eğitime katkıda bulunmak istiyorum.", exjp:"教育に貢献したいと思っています。" },
-  { lvl:"B2", tr:"eleştiri", jp:"批判", ex:"Yapıcı eleştiri gelişim için gereklidir.", exjp:"建設的な批判は成長に必要です。" },
-  { lvl:"B2", tr:"çelişki", jp:"矛盾", ex:"Söyledikleri arasında çelişki var.", exjp:"彼の発言には矛盾があります。" },
-  { lvl:"B2", tr:"düşünce", jp:"考え", ex:"Farklı düşüncelere saygı duymalıyız.", exjp:"異なる考えを尊重すべきです。" }
+try{const saved=JSON.parse(localStorage.getItem("tc_data_v2")||"{}");Object.assign(data,saved)}catch(e){}
+function save(){localStorage.setItem("tc_data_v2",JSON.stringify({...data}))}
+function markDay(){const d=new Date().toLocaleDateString("sv-SE");if(!data.days.includes(d)){data.days.push(d);save()}}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+const trnorm=s=>String(s).toLocaleLowerCase("tr").replace(/[.!?,:;'"()\s]/g,"");
+const jpNorm=s=>String(s).normalize("NFKC").replace(/[\u30A1-\u30F6]/g,m=>String.fromCharCode(m.charCodeAt(0)-0x60));
+const vocab=[["A1","ev","家","Benim evim çok güzel.","私の家はとてもきれいです。"],["A1","okul","学校","Çocuklar okula gidiyor.","子どもたちは学校へ行きます。"],["A1","su","水","Bir bardak su istiyorum.","水を一杯ください。"],["A1","ekmek","パン","Her sabah ekmek alırım.","毎朝パンを買います。"],["A1","çay","お茶","Bir çay lütfen.","お茶を一杯ください。"],["A1","kahve","コーヒー","Türk kahvesi çok ünlüdür.","トルココーヒーは有名です。"],["A1","süt","牛乳","Kahveye süt koyar mısın?","コーヒーに牛乳を入れてくれますか。"],["A1","elma","りんご","Her sabah bir elma yerim.","毎朝りんごを食べます。"],["A1","kitap","本","Bu kitap çok ilginç.","この本は面白いです。"],["A1","arkadaş","友達","Arkadaşımla sinemaya gidiyorum.","友達と映画に行きます。"],["A1","anne","母","Annem yemek yapıyor.","母は料理をしています。"],["A1","baba","父","Babam öğretmendir.","父は教師です。"],["A1","öğretmen","教師","O iyi bir öğretmen.","彼／彼女は良い教師です。"],["A1","öğrenci","学生","Ben öğrenciyim.","私は学生です。"],["A1","yemek","料理・食事","Türk yemeği çok lezzetli.","トルコ料理はおいしいです。"],["A1","güzel","美しい・良い","Hava bugün çok güzel.","今日は良い天気です。"],["A1","büyük","大きい","Bu şehir çok büyük.","この街は大きいです。"],["A1","küçük","小さい","Küçük bir ev.","小さな家。"],["A1","yeni","新しい","Yeni bir telefon aldım.","新しい電話を買いました。"],["A1","eski","古い","Eski bir araba.","古い車。"],["A1","gitmek","行く","Yarın İstanbul'a gidiyorum.","明日イスタンブールへ行きます。"],["A1","gelmek","来る","Akşam bize gel.","夕方うちに来て。"],["A1","sevmek","好き・愛する","Türkçeyi seviyorum.","トルコ語が好きです。"],["A1","yapmak","する・作る","Ne yapıyorsun?","何をしていますか。"],["A1","sabah","朝","Sabah erken kalkıyorum.","朝早く起きます。"],["A1","akşam","夕方・晩","Akşam yemeği hazır.","夕食の準備ができました。"],["A1","gece","夜","Dün gece film izledim.","昨夜映画を見ました。"],["A1","gün","日","İyi günler!","良い一日を！"],["A1","bugün","今日","Bugün hava yağmurlu.","今日は雨です。"],["A1","yarın","明日","Yarın görüşürüz.","また明日。"],["A1","araba","車","Arabam yok.","車がありません。"],["A1","oda","部屋","Odam aydınlık.","私の部屋は明るいです。"],["A1","saat","時計・時間","Saat kaç?","何時ですか。"],["A1","para","お金","Param yok.","お金がありません。"],["A1","iş","仕事","İşim yoğun.","仕事が忙しいです。"],
+["A2","konuşmak","話す","Türkçe biraz konuşuyorum.","少しトルコ語を話します。"],["A2","anlamak","理解する","Anlamıyorum, tekrar eder misin?","分かりません、もう一度言ってくれますか。"],["A2","çalışmak","勉強する・働く","Her gün Türkçe çalışıyorum.","毎日トルコ語を勉強します。"],["A2","beklemek","待つ","Otobüs bekliyorum.","バスを待っています。"],["A2","bulmak","見つける","Anahtarımı bulamıyorum.","鍵が見つかりません。"],["A2","soru","質問","Bir sorum var.","質問があります。"],["A2","cevap","答え","Cevabı bilmiyorum.","答えを知りません。"],["A2","hastane","病院","Hastane nerede?","病院はどこですか。"],["A2","ilaç","薬","İlaç alıyorum.","薬を飲んでいます。"],["A2","otobüs","バス","Otobüs durağı nerede?","バス停はどこですか。"],["A2","tren","列車","Tren saat dokuzda kalkıyor.","列車は9時に出ます。"],["A2","uçak","飛行機","Uçak daha hızlı.","飛行機の方が速いです。"],["A2","tatil","休暇","Yazın tatile gideceğiz.","夏に旅行します。"],["A2","hava","天気・空気","Yarın hava güzel olacak.","明日は天気が良いでしょう。"],["A2","yaz","夏","Yazın denize gireriz.","夏は海に入ります。"],["A2","kış","冬","Kışın kar yağıyor.","冬は雪が降ります。"],
+["B1","karar","決断","Karar verdim.","決断しました。"],["B1","fırsat","機会","Bu fırsatı kaçırmak istemiyorum.","この機会を逃したくありません。"],["B1","alışmak","慣れる","Yeni şehre alışıyorum.","新しい街に慣れています。"],["B1","başarmak","成し遂げる","Bu sınavı başaracağım.","この試験に合格します。"],["B1","deneyim","経験","Deneyimim var.","経験があります。"],["B1","etkilemek","影響を与える","Bu haber beni etkiledi.","このニュースに影響を受けました。"],["B1","gelişim","成長・上達","Gelişim çok önemli.","成長はとても重要です。"],["B1","olasılık","可能性","Olasılık yüksek.","可能性は高いです。"],
+["B2","varsayım","仮定","Bu sadece bir varsayım.","これは単なる仮定です。"],["B2","kanıt","証拠","Kanıt yok.","証拠がありません。"],["B2","katkı","貢献","Katkıda bulunmak istiyorum.","貢献したいです。"],["B2","eleştiri","批判","Yapıcı eleştiri önemlidir.","建設的批判は重要です。"],["B2","çelişki","矛盾","Bir çelişki var.","矛盾があります。"],["B2","düşünce","考え","Farklı düşüncelere saygı duymalıyız.","異なる考えを尊重すべきです。"]
+].map(x=>({lvl:x[0],tr:x[1],jp:x[2],ex:x[3],exjp:x[4]}));
+const grammar=[
+{lv:"A1",t:"母音調和（2方式・4方式）",exp:"接尾辞の母音は語の最後の母音に合わせて変化します。2方式では前母音（e,i,ö,ü）に -e/-de、後母音（a,ı,o,u）に -a/-da。4方式では -i/-ı/-u/-ü を使い分けます。",ex:["ev → evde（家で）","okul → okulda（学校で）","ev → eve（家へ）","kitap → kitabı（その本を）"],q:"masa（テーブル）＋「〜で」は？",opts:["masada","masede","masıde","masüde"],a:0,why:"masaの最後はa。後母音なので -da を付けて masada。"},
+{lv:"A1",t:"複数形 -ler / -lar",exp:"最後の母音が前母音なら -ler、後母音なら -lar。数詞がある場合、名詞は通常複数形にしません。",ex:["kitap → kitaplar","gözlük → gözlükler","üç kitap（3冊の本）"],q:"çocuk（子ども）の複数形は？",opts:["çocukler","çocuklar","çocuqlar","çocukları"],a:1,why:"最後の母音uは後母音。-larを付けて çocuklar。"},
+{lv:"A1",t:"人称所有接尾辞（evimなど）",exp:"所有を表す接尾辞を名詞につけます。benim evim＝私の家、senin evin＝君の家、onun evi＝彼／彼女の家。所有者を省略して evim とだけ言うこともできます。",ex:["benim kitabım（私の本）","senin okulun（君の学校）","onun arabası（彼／彼女の車）"],q:"「私の家」は？",opts:["benim evin","benim evim","benim evi","benim evler"],a:1,why:"1人称単数の所有接尾辞は -im。ev + im = evim。"},
+{lv:"A1",t:"現在進行形 -iyor",exp:"動詞語幹に -iyor 系の接尾辞を付け、現在進行中の動作を表します。人称に応じて末尾も変化します。",ex:["geliyorum（私は来ています）","gidiyorsun（君は行っています）","konuşuyor（彼／彼女は話しています）"],q:"「私は勉強しています」(çalışmak) は？",opts:["çalışırım","çalışıyorum","çalıştım","çalışacağım"],a:1,why:"現在進行形は çalış- + -ıyor + -um → çalışıyorum。"},
+{lv:"A1",t:"否定 -ma / -me",exp:"動詞に否定接尾辞 -ma/-me を付けます。母音調和に合わせます。現在進行形では -mıyor/-miyor などになります。",ex:["gitmiyorum（行きません／行っていません）","bilmiyorum（知りません）","istemiyorum（欲しくありません）"],q:"「分かりません」は？",opts:["anlıyorum","anlamıyorum","anlamadım","anlayacağım"],a:1,why:"anlamakの否定現在進行形は anlamıyorum。"},
+{lv:"A2",t:"過去形 -dı / -di / -du / -dü",exp:"過去に完了した動作を表します。母音調和に加え、無声音の後では -tı/-ti/-tu/-tü になります。",ex:["geldim（来ました）","gittim（行きました）","okudum（読みました）"],q:"「私は行きました」(gitmek) は？",opts:["gidiyorum","gideceğim","gittim","gitmişim"],a:2,why:"git-の末尾tは無声音なので -ti、1人称 -mで gittim。"},
+{lv:"A2",t:"未来形 -acak / -ecek",exp:"未来の予定・予測を表します。語の母音に合わせて -acak/-ecek を付け、人称語尾を続けます。",ex:["gideceğim（私は行く予定です）","yapacak（彼／彼女はするでしょう）","geleceğiz（私たちは来ます）"],q:"「私は来る予定です」は？",opts:["geldim","geliyorum","geleceğim","gelmişim"],a:2,why:"gel- + -ecek + -im → geleceğim。"}
 ];
-
-const GRAMMAR = [
-  {
-    lv:"A1", t:"母音調和（2方式と4方式）",
-    exp:[
-      "トルコ語の接尾辞の母音は、<b>直前の語の最終母音</b>に合わせて変化します。これを<b>母音調和</b>と呼びます。",
-      "<b>2方式</b>: 最終母音が前母音（e・i・ö・ü）なら接尾辞は <b>-e / -de</b>、後母音（a・ı・o・u）なら <b>-a / -da</b> になります。",
-      "<b>4方式</b>: 対格などは4通り。<b>-i / -ı / -u / -ü</b> を最終母音に合わせて選びます（e,i→i／a,ı→ı／o,u→u／ö,ü→ü）。"
-    ],
-    ex:[
-      { tr:"ev → evde (家で)", jp:"最終母音 e なので -de" },
-      { tr:"okul → okulda (学校で)", jp:"最終母音 u なので -da" },
-      { tr:"ev → eve (家へ)", jp:"2方式: 前母音なら -e" },
-      { tr:"kitap → kitabı (その本を)", jp:"4方式: a なので -ı" }
-    ],
-    q:[
-      { q:"「masa（テーブル）」に「〜で」の意味の接尾辞を付けると？", opts:["masada","masede","masıda","masüde"], a:0,
-        expl:"最終母音が a（後母音）なので、位格は -da になります。「masada」＝テーブルの上で。" },
-      { q:"「ev（家）」に「〜へ」の意味の接尾辞を付けると？", opts:["eva","eve","evıa","evü"], a:1,
-        expl:"最終母音が e（前母音）なので、与格は -e。「eve」＝家へ。" }
-    ]
-  },
-  {
-    lv:"A1", t:"複数接尾辞 -ler / -lar",
-    exp:[
-      "複数は最終母音が前母音なら <b>-ler</b>、後母音なら <b>-lar</b> を付けます。",
-      "数詞があるときは複数形にしません:「üç kitap」（3冊の本）、「iki ev」（2軒の家）。"
-    ],
-    ex:[
-      { tr:"kitap → kitaplar", jp:"本 → 本（複数）" },
-      { tr:"okul → okullar", jp:"学校 → 学校（複数）" },
-      { tr:"gözlük → gözlükler", jp:"めがね → めがね（複数）" },
-      { tr:"üç kitap", jp:"数詞があるので単数形のまま" }
-    ],
-    q:[
-      { q:"「çocuk（子ども）」の複数形は？", opts:["çocukler","çocuklar","çocuqlar","çocukları"], a:1,
-        expl:"最終母音 u は後母音なので -lar。「çocuklar」＝子どもたち。" }
-    ]
-  },
-  {
-    lv:"A1", t:"人称所有接尾辞（benim evim など）",
-    exp:
+const phrases=[
+["あいさつ","Merhaba!","こんにちは！"],["あいさつ","Günaydın!","おはよう！"],["あいさつ","İyi akşamlar!","こんばんは！"],["あいさつ","Nasılsın?","元気？"],["あいさつ","İyiyim, teşekkür ederim.","元気です、ありがとう。"],["あいさつ","Görüşürüz!","また会いましょう！"],["基本","Teşekkür ederim.","ありがとうございます。"],["基本","Rica ederim.","どういたしまして。"],["基本","Lütfen.","お願いします／どうぞ。"],["基本","Özür dilerim.","ごめんなさい。"],["基本","Evet / Hayır","はい／いいえ"],["基本","Anlamadım.","分かりませんでした。"],["基本","Tekrar eder misiniz?","もう一度言っていただけますか。"],["基本","Türkçe öğreniyorum.","トルコ語を勉強しています。"],["旅行","Bu nerede?","これはどこですか。"],["旅行","Ne kadar?","いくらですか。"],["旅行","Yardım eder misiniz?","助けていただけますか。"],["旅行","Tuvalet nerede?","トイレはどこですか。"],["旅行","Bir çay lütfen.","お茶を一杯ください。"],["スポーツ","Antrenman yapıyorum.","練習しています。"],["スポーツ","Koşmayı seviyorum.","走ることが好きです。"],["スポーツ","Yarış ne zaman?","レースはいつですか。"],["スポーツ","Çok yoruldum.","とても疲れました。"],["日常","Bugün ne yapıyorsun?","今日は何をするの？"],["日常","Bence güzel.","私には良いと思います。"],["日常","Bilmiyorum.","知りません。"],["日常","Sorun değil.","問題ありません。"],["日常","Harika!","すばらしい！"]
+];
+const categories=["すべて",...new Set(phrases.map(p=>p[0]))];
+function switchView(v){document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));$(v).classList.add("on");document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.view===v));if(v==="stats")renderStats();window.scrollTo({top:0,behavior:"smooth"})}
+$("tabs").addEventListener("click",e=>{const b=e.target.closest("[data-view]");if(b)switchView(b.dataset.view)});
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>switchView(b.dataset.go));
+$("dailyBtn").onclick=()=>{const p=phrases[Math.floor(Math.random()*phrases.length)];$("daily").textContent=p[1]+" — "+p[2];markDay()};
+$("instantCheck").onclick=()=>{const a=trnorm($("instantAnswer").value);const ok=a==="türkçeöğreniyorum";$("instantResult").textContent=ok?"正解！Tebrikler!":"正解例：Türkçe öğreniyorum.";data[ok?"ok":"ng"]++;markDay();save()};
+function renderVocab(){
+ $("levels").innerHTML=["A1","A2","B1","B2","すべて"].map(l=>`<button class="${data.level===l?"on":""}" data-l="${l}">${l}</button>`).join("");
+ $("vfilters").innerHTML=["すべて","お気に入り","学習済み"].map(f=>`<button class="${data.vfilter===f?"on":""}" data-f="${f}">${f}</button>`).join("");
+ const q=trnorm($("vsearch").value),j=jpNorm($("vsearch").value);
+ const list=vocab.filter(w=>(data.level==="すべて"||w.lvl===data.level)&&(data.vfilter==="すべて"||(data.vfilter==="お気に入り"?data.fav.includes(w.tr):data.learned.includes(w.tr)))&&(!q&&!j||trnorm(w.tr).includes(q)||jpNorm(w.jp).includes(j)));
+ $("vlist").innerHTML=list.length?list.map(w=>`<div class="word-item"><div class="word-head"><div style="flex:1"><span class="tag">${w.lvl}</span><span class="tr">${esc(w.tr)}</span><div class="jp">${esc(w.jp)}</div></div><button class="star ${data.fav.includes(w.tr)?"on":""}" data-star="${esc(w.tr)}" title="お気に入り">★</button></div><div class="word-ex"><b>${esc(w.ex)}</b><br>${esc(w.exjp)}</div><button class="small ${data.learned.includes(w.tr)?"ghost":""}" data-learn="${esc(w.tr)}">${data.learned.includes(w.tr)?"✔ 学習済み":"学習済みにする"}</button><button class="small ghost" data-say="${esc(w.tr)}">🔊</button></div>`).join(""):'<div class="empty">該当する単語がありません。</div>';
+ $("levels").querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{data.level=b.dataset.l;renderVocab()});
+ $("vfilters").querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{data.vfilter=b.dataset.f;renderVocab()});
+ $("vlist").querySelectorAll("[data-star]").forEach(b=>b.onclick=()=>{toggle(data.fav,b.dataset.star);renderVocab()});
+ $("vlist").querySelectorAll("[data-learn]").forEach(b=>b.onclick=()=>{toggle(data.learned,b.dataset.learn);markDay();renderVocab()});
+ $("vlist").querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>speak(b.dataset.say));
+}
+function toggle(arr,v){const i=arr.indexOf(v);i<0?arr.push(v):arr.splice(i,1);save()}
+$("vsearch").oninput=renderVocab;
+function renderGrammar(){
+ $("glist").innerHTML=grammar.map((g,i)=>`<details class="lesson"><summary><span class="tag">${g.lv}</span>${g.t}</summary><div class="lesson-body"><p style="margin:12px 0">${g.exp}</p>${g.ex.map(x=>`<div class="exline">${x}</div>`).join("")}<div class="question"><p>${g.q}</p><div class="options">${g.opts.map((o,j)=>`<button data-g="${i}" data-a="${j}">${o}</button>`).join("")}</div><div class="feedback" id="gf${i}"></div></div></div></details>`).join("");
+ $("glist").querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{const g=grammar[+b.dataset.g],ok=+b.dataset.a===g.a;const box=$("gf"+b.dataset.g);box.className="feedback show";box.textContent=(ok?"正解！":"不正解。")+" "+g.why;b.parentElement.querySelectorAll("button").forEach((x,j)=>{x.disabled=true;if(j===g.a)x.classList.add("correct");else if(j===+b.dataset.a)x.classList.add("wrong")});data[ok?"ok":"ng"]++;markDay();save()});
+}
+function renderPhrases(){
+ $("pcats").innerHTML=categories.map(c=>`<button class="${data.phraseCat===c?"on":""}" data-cat="${c}">${c}</button>`).join("");
+ const q=trnorm($("psearch").value),j=jpNorm($("psearch").value);
+ const list=phrases.filter(p=>(data.phraseCat==="すべて"||p[0]===data.phraseCat)&&(!q&&!j||trnorm(p[1]).includes(q)||jpNorm(p[2]).includes(j)));
+ $("plist").innerHTML=list.length?list.map(p=>`<div class="word-item"><div class="word-head"><div style="flex:1"><span class="tag">${p[0]}</span><div class="tr">${esc(p[1])}</div><div class="jp">${esc(p[2])}</div></div><button class="small ghost" data-say="${esc(p[1])}">🔊</button></div></div>`).join(""):'<div class="empty">見つかりませんでした。</div>';
+ $("pcats").querySelectorAll("[data-cat]").forEach(b=>b.onclick=()=>{data.phraseCat=b.dataset.cat;renderPhrases()});$("plist").querySelectorAll("[data-say]").forEach(b=>b.onclick=()=>speak(b.dataset.say));
+}
+$("psearch").oninput=renderPhrases;
+function speak(text){if(!("speechSynthesis"in window)){alert("このブラウザは読み上げ非対応です");return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="tr-TR";u.rate=.85;const vs=speechSynthesis.getVoices();u.voice=vs.find(v=>/^tr/i.test(v.lang))||null;speechSynthesis.speak(u)}
+$("ttsBtn").onclick=()=>{if(!$("ttsInput").value.trim())return;$("ttsStatus").textContent="読み上げ中…";speak($("ttsInput").value.trim());markDay()};
+$("ttsPresets").innerHTML=phrases.slice(0,12).map(p=>`<button data-preset="${esc(p[1])}">${esc(p[1])}</button>`).join("");
+$("ttsPresets").querySelectorAll("[data-preset]").forEach(b=>b.onclick=()=>{$("ttsInput").value=b.dataset.preset;speak(b.dataset.preset)});
+if("speechSynthesis"in window){speechSynthesis.onvoiceschanged=()=>{$("ttsStatus").textContent=speechSynthesis.getVoices().some(v=>/^tr/i.test(v.lang))?"トルコ語音声を利用できます。":"トルコ語音声が見つからない場合は、端末設定でトルコ語の声を追加してください。"};setTimeout(()=>speechSynthesis.onvoiceschanged&&speechSynthesis.onvoiceschanged(),500)}  
+const writeQs=[["私はトルコ語を勉強しています。","Türkçe öğreniyorum."],["ありがとう。","Teşekkür ederim."],["元気ですか？","Nasılsın?"],["私は学生です。","Ben öğrenciyim."],["明日行きます。","Yarın gideceğim."],["分かりません。","Anlamıyorum."],["お茶を一杯ください。","Bir çay lütfen."],["私は走ることが好きです。","Koşmayı seviyorum."]];
+let qlist=[],qidx=0,qscore=0,qdone=false;
+function newQuiz(){
+ qdone=false;
+ if(data.qtype==="word"){const w=vocab[Math.floor(Math.random()*vocab.length)];const others=vocab.filter(x=>x.tr!==w.tr).sort(()=>Math.random()-.5).slice(0,3);qlist=[{q:`「${w.jp}」にあたるトルコ語は？`,a:w.tr,opts:[w.tr,...others.map(x=>x.tr)].sort(()=>Math.random()-.5),why:`${w.tr} = ${w.jp}`}];}
+ else if(data.qtype==="gram"){const g=grammar[Math.floor(Math.random()*grammar.length)];qlist=[{q:g.q,a:g.opts[g.a],opts:g.opts,why:g.why}];}
+ else{const w=writeQs[Math.floor(Math.random()*writeQs.length)];qlist=[{q:`トルコ語に訳してください：${w[0]}`,a:w[1],opts:[],why:"正解例："+w[1]}]}
+ renderQuizQuestion();
+}
+function renderQuizQuestion(){
+ const q=qlist[0];$("qbody").innerHTML=`<p class="desc">1問ずつ出題します。回答後に解説を確認できます。</p><p class="quiz-q">${q.q}</p>${data.qtype==="write"?`<input id="writeAnswer" placeholder="トルコ語で入力"><button id="writeCheck">答え合わせ</button>`:`<div class="options">${q.opts.map((o,i)=>`<button data-ans="${i}">${esc(o)}</button>`).join("")}</div>`}<div class="feedback" id="qfeedback"></div><button class="ghost" id="nextQ" style="display:none">次の問題 →</button>`;
+ if(data.qtype==="write"){$("writeCheck").onclick=()=>gradeWrite($("writeAnswer").value,q);$("writeAnswer").onkeydown=e=>{if(e.key==="Enter")gradeWrite(e.target.value,q)}}
+ else $("qbody").querySelectorAll("[data-ans]").forEach(b=>b.onclick=()=>grade(+b.dataset.ans,q));
+}
+function grade(n,q){if(qdone)return;qdone=true;const ok=q.opts[n]===q.a;showFeedback(ok,q);$("qbody").querySelectorAll("[data-ans]").forEach((b,i)=>{b.disabled=true;if(q.opts[i]===q.a)b.classList.add("correct");else if(i===n)b.classList.add("wrong")});}
+function gradeWrite(v,q){if(qdone)return;qdone=true;const ok=trnorm(v)===trnorm(q.a);showFeedback(ok,q)}
+function showFeedback(ok,q){const f=$("qfeedback");f.className="feedback show";f.innerHTML=(ok?"✅ 正解！":"❌ 不正解。")+"<br>"+esc(q.why);data[ok?"ok":"ng"]++;markDay();save();$("nextQ").style.display="inline-block";$("nextQ").onclick=newQuiz}
+$("qTabs").querySelectorAll("[data-type]").forEach(b=>b.onclick=()=>{data.qtype=b.dataset.type;$("qTabs").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));newQuiz()});
+function renderStats(){const total=data.ok+data.ng,rate=total?Math.round(data.ok/total*100):0;$("statgrid").innerHTML=`<div class="stat-box"><strong>${data.learned.length}</strong><span>学習済み単語</span></div><div class="stat-box"><strong>${data.fav.length}</strong><span>お気に入り</span></div><div class="stat-box"><strong>${rate}%</strong><span>正答率（${total}問）</span></div><div class="stat-box"><strong>${data.days.length}</strong><span>学習日数</span></div>`}
+$("reset").onclick=()=>{if(confirm("学習記録をリセットしますか？")){data.fav=[];data.learned=[];data.ok=0;data.ng=0;data.days=[];save();renderStats()}};
+let gptLevel="A1";
+function renderGPT(){const p1=`あなたはトルコ語会話の先生です。私のレベルは${gptLevel}です。\n${gptLevel}に合う自然なトルコ語で会話してください。私の文に間違いがあれば、①自然な訂正文 ②日本語で短い説明 ③会話を続ける質問、の順に返してください。難しい語には日本語訳を添えてください。まずトルコ語で話しかけてください。`;const p2=`あなたはトルコ語添削の先生です。私が送るトルコ語を、${gptLevel}レベルを目安に添削してください。\n1. 元の文\n2. 正しい文\n3. より自然な表現（あれば）\n4. 文法・語彙の説明（日本語）\n5. 追加例文1つ\nの順に回答してください。意味が通る表現と、より自然な表現は区別してください。`; $("gp1").textContent=p1;$("gp2").textContent=p2}
+$("glevels").innerHTML=["A1","A2","B1","B2"].map(l=>`<button class="${gptLevel===l?"on":""}" data-lv="${l}">${l}</button>`).join("");
+$("glevels").querySelectorAll("[data-lv]").forEach(b=>b.onclick=()=>{gptLevel=b.dataset.lv;$("glevels").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));renderGPT()});
+async function copyText(text,msg){try{await navigator.clipboard.writeText(text);msg.textContent="コピーしました！"}catch(e){const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");msg.textContent="コピーしました！"}catch(_){msg.textContent="コピーできません。長押しして手動コピーしてください。"}ta.remove()}setTimeout(()=>msg.textContent="",2500)}
+$("copy1").onclick=()=>copyText($("gp1").textContent,$("copied1"));$("copy2").onclick=()=>copyText($("gp2").textContent,$("copied2"));$("openGPT").onclick=()=>window.open("https://chatgpt.com/","_blank","noopener");
+renderVocab();renderGrammar();renderPhrases();renderStats();renderGPT();newQuiz();
+</script>
+</body>
+</html>  
