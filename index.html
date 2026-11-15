@@ -11,12 +11,13 @@
   --ink:#222; --muted:#777; --bg:#f7f7fa; --card:#fff;
   --radius:16px; --shadow:0 3px 12px #0001;
   --green:#1d7a3a; --green-soft:#e8f6ec;
+  --blue:#155e9c;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{
   font-family:system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
   background:var(--bg); color:var(--ink);
-  padding-bottom:calc(70px + env(safe-area-inset-bottom));
+  padding-bottom:calc(30px + env(safe-area-inset-bottom));
 }
 header{
   background:var(--red); color:#fff; padding:20px 16px;
@@ -25,10 +26,10 @@ header{
 }
 header h1{font-size:22px}
 header p{font-size:13px;opacity:.9;margin-top:4px}
-main{max-width:800px;margin:auto;padding:16px}
+main{max-width:800px;margin:auto;padding:12px 14px 20px}
 .card{
   background:var(--card); padding:20px; border-radius:var(--radius);
-  margin:16px 0; box-shadow:var(--shadow);
+  margin:14px 0; box-shadow:var(--shadow);
 }
 .card h2{font-size:18px;margin-bottom:10px;color:var(--ink)}
 .card p.desc{font-size:13.5px;color:var(--muted);margin-bottom:12px;line-height:1.7}
@@ -41,6 +42,7 @@ button:hover{opacity:.85}
 button:disabled{opacity:.4;cursor:default}
 button.ghost{background:#fff;color:var(--red);border:1.5px solid var(--red)}
 button.small{padding:8px 14px;font-size:13px}
+button.icon{width:40px;height:40px;padding:0;margin:0;border-radius:10px;font-size:17px;flex:none}
 textarea,input{
   width:100%; padding:12px; box-sizing:border-box; border:1px solid #ddd;
   border-radius:10px; font-size:16px; font-family:inherit; outline:none; background:#fff;
@@ -50,75 +52,89 @@ label{font-size:13px;font-weight:700;display:block;margin:12px 0 6px}
 label small{color:var(--muted);font-weight:400}
 /* タブ */
 nav.tabs{
-  display:flex; gap:4px; padding:10px 8px; overflow-x:auto;
+  display:flex; gap:4px; padding:10px 8px 2px; overflow-x:auto;
   max-width:800px; margin:0 auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
 }
+nav.tabs::-webkit-scrollbar{display:none}
 nav.tabs button{
-  flex:1; min-width:76px; margin:0; background:#fff; color:var(--muted);
-  border:1.5px solid #eee; padding:10px 8px; font-size:13.5px; white-space:nowrap;
+  flex:none; margin:0; background:#fff; color:var(--muted);
+  border:1.5px solid #eee; padding:10px 14px; font-size:13.5px; white-space:nowrap;
 }
 nav.tabs button.on{background:var(--red);color:#fff;border-color:var(--red)}
 .view{display:none}
 .view.on{display:block;animation:fade .18s ease}
 @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-/* レベル選択 */
-.levels{display:flex;gap:6px;margin:6px 0 14px}
-.levels button{flex:1;margin:0;padding:10px 4px;background:#fff;color:var(--muted);border:1.5px solid #eee;font-size:14px}
-.levels button.on{background:var(--red);color:#fff;border-color:var(--red)}
-/* チャット */
-.msgs{display:flex;flex-direction:column;gap:14px;margin:14px 0}
-.msg{max-width:88%;display:flex;flex-direction:column}
-.msg.user{align-self:flex-end}
-.msg.ai{align-self:flex-start}
-.bubble{padding:12px 15px;border-radius:16px;font-size:15px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
-.msg.user .bubble{background:var(--red);color:#fff;border-bottom-right-radius:4px}
-.msg.ai .bubble{background:#fff;border:1.5px solid #f3d8dd;border-bottom-left-radius:4px}
-.msg .trjp{font-size:12.5px;color:var(--muted);margin-top:5px;padding:0 4px}
-.fix-card{margin-top:8px;background:#fff;border:1.5px dashed var(--red);border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.7}
-.fix-card .lbl{font-size:11px;font-weight:800;color:var(--red);letter-spacing:1px;margin:8px 0 3px}
-.fix-card .lbl:first-child{margin-top:0}
-.fix-card .ok-badge{display:inline-block;background:var(--green-soft);color:var(--green);font-size:11.5px;font-weight:700;border-radius:8px;padding:3px 9px;margin-top:6px}
-.fix-card del{color:#999}
-.fix-card ins{color:var(--red);text-decoration:none;font-weight:700}
-.wordchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.wordchips span{background:var(--red-soft);color:var(--red-dark);font-size:12px;border-radius:8px;padding:4px 9px;font-weight:700}
-.typing{display:flex;gap:4px;padding:14px 16px;background:#fff;border-radius:16px;border:1.5px solid #f3d8dd;align-self:flex-start}
-.typing i{width:7px;height:7px;border-radius:50%;background:var(--red);animation:bl 1s infinite}
-.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
-@keyframes bl{0%,100%{opacity:.25}50%{opacity:1}}
-.inputrow{display:flex;gap:8px;align-items:flex-end}
-.inputrow textarea{flex:1;resize:none;height:48px;max-height:130px}
-.inputrow button{height:48px;padding:0 20px;margin:0}
+/* チップ（レベル・カテゴリ・フィルタ） */
+.chips{display:flex;gap:6px;margin:6px 0 12px;flex-wrap:wrap}
+.chips button{margin:0;padding:9px 14px;font-size:13.5px;background:#fff;color:var(--muted);border:1.5px solid #eee}
+.chips button.on{background:var(--red);color:#fff;border-color:var(--red)}
+/* 単語帳・表現集カード */
+.word-item{background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:10px}
+.word-head{display:flex;align-items:center;gap:10px}
+.word-head .tr{font-size:17px;font-weight:700;flex:1;word-break:break-word}
+.word-head .jp{font-size:14px;color:var(--ink);margin-top:2px}
+.word-head .star{border:none;background:none;font-size:20px;padding:4px;color:#c9b0b4}
+.word-head .star.on{color:var(--red)}
+.wbtn{border:1.5px solid #eee;background:#fff;color:var(--muted)}
+.wbtn.on{background:var(--green-soft);color:var(--green);border-color:var(--green)}
+.word-ex{margin-top:8px;font-size:13.5px;color:var(--muted);line-height:1.7;border-top:1px dashed #eee;padding-top:8px}
+.word-ex b{color:var(--ink)}
+.lvl-tag{display:inline-block;background:var(--red-soft);color:var(--red-dark);font-size:11px;font-weight:800;border-radius:8px;padding:3px 8px;margin-right:8px;vertical-align:middle}
+.note{margin-top:8px;font-size:13px;color:var(--blue);line-height:1.7}
+/* 文法 */
+details.lesson{background:#fff;border-radius:12px;box-shadow:var(--shadow);margin-bottom:10px;overflow:hidden}
+details.lesson summary{
+  list-style:none;cursor:pointer;padding:15px 16px;font-weight:700;font-size:15px;
+  display:flex;align-items:center;gap:8px;
+}
+details.lesson summary::-webkit-details-marker{display:none}
+details.lesson summary::after{content:"▾";margin-left:auto;color:var(--muted)}
+details.lesson[open] summary::after{content:"▴"}
+details.lesson .body{padding:0 16px 16px;border-top:1px solid #f2e8e8}
+.lesson .exp{font-size:14px;line-height:1.9;margin:12px 0}
+.lesson .exp b{color:var(--red-dark)}
+.lesson .ex-line{font-size:13.5px;line-height:1.7;color:var(--muted);margin-bottom:6px}
+.lesson .ex-line b{color:var(--ink);font-size:14.5px}
+.gq{margin-top:14px;background:var(--bg);border-radius:12px;padding:13px}
+.gq .q{font-size:14px;font-weight:700;margin-bottom:8px;line-height:1.6}
+.gq .opts{display:flex;flex-direction:column;gap:6px}
+.gq .opts button{margin:0;text-align:left;background:#fff;color:var(--ink);border:1.5px solid #eee;font-weight:400;font-size:14px}
+.gq .opts button.ok{background:var(--green-soft);color:var(--green);border-color:var(--green);font-weight:700}
+.gq .opts button.ng{background:#fdeaea;color:var(--red-dark);border-color:var(--red)}
+.gq .expl{display:none;margin-top:8px;font-size:13px;color:var(--ink);line-height:1.8;background:var(--green-soft);border-radius:8px;padding:8px 10px}
+.gq .expl.show{display:block}
+/* クイズ */
+.quiz-q{font-size:16.5px;font-weight:700;line-height:1.7;margin:8px 0 14px;word-break:break-word}
+.quiz-opts{display:flex;flex-direction:column;gap:8px}
+.quiz-opts button{margin:0;text-align:left;font-weight:400;font-size:15px;background:#fff;color:var(--ink);border:1.5px solid #eee}
+.quiz-opts button.ok{background:var(--green-soft);color:var(--green);border-color:var(--green);font-weight:700}
+.quiz-opts button.ng{background:#fdeaea;color:var(--red-dark);border-color:var(--red)}
+.quiz-result{margin-top:12px;font-size:14px;line-height:1.8;display:none;border-radius:10px;padding:10px 12px}
+.quiz-result.ok{display:block;background:var(--green-soft);color:var(--green)}
+.quiz-result.ng{display:block;background:#fdeaea;color:var(--red-dark)}
+.quiz-result .expl{color:var(--ink);font-size:13.5px;margin-top:4px}
+.prog{font-size:12.5px;color:var(--muted);margin-bottom:4px}
+/* 発音 */
+.tts-status{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.7}
+.tts-status.ok{color:var(--green)}
+/* 統計 */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat-box{background:var(--red-soft);border-radius:14px;padding:18px 10px;text-align:center}
+.stat-box .n{font-size:26px;font-weight:800;color:var(--red)}
+.stat-box .l{font-size:12px;color:var(--muted);margin-top:4px}
+/* ChatGPT */
+.prompt-box{background:var(--bg);border:1px solid #eee;border-radius:12px;padding:12px;font-size:13px;line-height:1.8;white-space:pre-wrap;word-break:break-word;margin-top:8px}
 .notice{background:#fff;border:1.5px solid var(--red);border-radius:12px;padding:14px;font-size:13.5px;line-height:1.8;margin-bottom:12px}
 .notice b{color:var(--red)}
 .empty{text-align:center;color:var(--muted);font-size:13.5px;padding:22px 8px;line-height:1.9}
-/* 翻訳 */
-.dirrow{display:flex;gap:6px;margin-bottom:6px}
-.dirrow button{flex:1;margin:0;background:#fff;color:var(--muted);border:1.5px solid #eee;padding:10px 4px;font-size:14px}
-.dirrow button.on{background:var(--red);color:#fff;border-color:var(--red)}
-#transResult{margin-top:14px}
-#transResult .main{font-size:17px;font-weight:700;line-height:1.6}
-#transResult .notes{font-size:13.5px;color:var(--muted);white-space:pre-wrap;margin-top:8px;line-height:1.8}
-/* 履歴・復習 */
-.item{display:flex;align-items:center;gap:12px;background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;margin-bottom:9px}
-.item .t{font-weight:700;font-size:14.5px;line-height:1.5;word-break:break-word}
-.item .s{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5}
-.item .del{margin-left:auto;border:none;background:var(--red-soft);color:var(--red);width:34px;height:34px;border-radius:10px;font-size:14px;flex:none}
-.flash{min-height:220px;background:#fff;border-radius:20px;box-shadow:var(--shadow);border-top:6px solid var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;cursor:pointer;user-select:none}
-.flash .lang{font-size:11px;font-weight:800;color:var(--red);letter-spacing:2px}
-.flash .word{font-size:22px;font-weight:700;line-height:1.5;word-break:break-word}
-.flash.tr .word{color:var(--red)}
-.flash .hint{font-size:12px;color:var(--muted)}
-.graderow{display:flex;gap:12px;margin-top:14px}
-.graderow button{flex:1;margin:0}
-.subtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.subtabs button{margin:0;background:#fff;color:var(--muted);border:1.5px solid #eee;font-size:13px;padding:8px 12px}
-.subtabs button.on{background:var(--red);color:#fff;border-color:var(--red)}
 .status-ok{color:var(--green);font-size:13px;font-weight:700}
+.row{display:flex;gap:8px;align-items:flex-end}
+.row input,.row textarea{flex:1}
 @media (min-width:768px){
-  main{padding:24px}
-  .msg{max-width:72%}
+  main{padding:20px}
   header h1{font-size:26px}
+  .stat-grid{grid-template-columns:repeat(4,1fr)}
 }
 </style>
 </head>
@@ -131,10 +147,13 @@ nav.tabs button.on{background:var(--red);color:#fff;border-color:var(--red)}
 
 <nav class="tabs">
   <button class="tab on" data-v="home">ホーム</button>
-  <button class="tab" data-v="chat">AI会話</button>
-  <button class="tab" data-v="trans">翻訳</button>
-  <button class="tab" data-v="hist">学習履歴</button>
-  <button class="tab" data-v="conf">設定</button>
+  <button class="tab" data-v="vocab">単語帳</button>
+  <button class="tab" data-v="grammar">文法</button>
+  <button class="tab" data-v="phrase">表現集</button>
+  <button class="tab" data-v="tts">発音練習</button>
+  <button class="tab" data-v="quiz">練習</button>
+  <button class="tab" data-v="stats">学習記録</button>
+  <button class="tab" data-v="gpt">ChatGPT</button>
 </nav>
 
 <main>
@@ -161,82 +180,112 @@ nav.tabs button.on{background:var(--red);color:#fff;border-color:var(--red)}
       <input id="speech" placeholder="読み上げたいトルコ語">
       <button onclick="speak()">読み上げ</button>
     </div>
-  </section>
 
-  <!-- ============ AI会話 ============ -->
-  <section class="view" id="v-chat">
     <div class="card">
-      <h2>AIトルコ語会話</h2>
-      <div class="levels" id="levels">
-        <button data-l="A1" class="on">A1</button>
-        <button data-l="A2">A2</button>
-        <button data-l="B1">B1</button>
-        <button data-l="B2">B2</button>
+      <h2>学習メニュー</h2>
+      <p class="desc">このアプリは完全オフラインで動作します（AI送信・API課金は一切なし）。</p>
+      <div class="chips">
+        <button onclick="switchView('vocab')">📚 単語帳</button>
+        <button onclick="switchView('grammar')">📐 文法</button>
+        <button onclick="switchView('phrase')">💬 表現集</button>
+        <button onclick="switchView('quiz')">✏️ 練習</button>
+        <button onclick="switchView('gpt')">🤖 ChatGPT連携</button>
       </div>
-      <div id="backendNotice" class="notice" style="display:none">
-        <b>AIバックエンドが未設定です。</b><br>
-        実際にAIと会話するには、設定タブでご自身がデプロイしたAPIプロキシ（Cloudflare Worker）のURLを入力してください。APIキーをブラウザ側に置く必要はありません。
-        <div style="margin-top:10px"><button class="small" onclick="switchView('conf')">設定を開く</button></div>
-      </div>
-      <div class="msgs" id="msgs"></div>
-      <div class="empty" id="chatEmpty">
-        日本語でもトルコ語でも自由に入力できます。<br>AIはレベルに合わせたトルコ語で返答し、間違いを日本語で解説します。
-      </div>
-      <div class="inputrow">
-        <textarea id="chatInput" placeholder="日本語またはトルコ語で入力…" rows="1"></textarea>
-        <button id="btnSend">送信</button>
-      </div>
-      <div style="margin-top:10px"><button class="ghost small" id="btnClearChat">会話を新しくする</button></div>
     </div>
   </section>
 
-  <!-- ============ 翻訳 ============ -->
-  <section class="view" id="v-trans">
+  <!-- ============ 単語帳 ============ -->
+  <section class="view" id="v-vocab">
     <div class="card">
-      <h2>翻訳</h2>
-      <div class="dirrow" id="dirRow">
-        <button data-d="auto" class="on">自動判定</button>
-        <button data-d="ja2tr">日本語 → トルコ語</button>
-        <button data-d="tr2ja">トルコ語 → 日本語</button>
-      </div>
-      <textarea id="transInput" style="height:110px" placeholder="翻訳したい文章を入力"></textarea>
-      <button id="btnTrans" style="margin-top:12px">翻訳する</button>
-      <div id="transResult"></div>
+      <h2>単語帳</h2>
+      <p class="desc">レベル別の単語を学習します。★でお気に入り、✔で学習済みを記録できます。</p>
+      <div class="chips" id="vocabLevels"></div>
+      <div class="chips" id="vocabFilters"></div>
+      <input id="vocabSearch" placeholder="トルコ語・日本語で検索">
+      <div id="vocabList" style="margin-top:12px"></div>
     </div>
   </section>
 
-  <!-- ============ 学習履歴 ============ -->
-  <section class="view" id="v-hist">
+  <!-- ============ 文法 ============ -->
+  <section class="view" id="v-grammar">
     <div class="card">
-      <h2>学習履歴</h2>
-      <div class="subtabs" id="histTabs">
-        <button data-h="chat" class="on">会話履歴</button>
-        <button data-h="mistakes">間違えた文法</button>
-        <button data-h="words">学んだ単語</button>
-        <button data-h="review">復習</button>
-      </div>
-      <div id="histBody"></div>
+      <h2>文法学習</h2>
+      <p class="desc">初級から中級まで、段階的に学べます。各レッスンに確認問題が付いています。</p>
+      <div id="grammarList"></div>
     </div>
   </section>
 
-  <!-- ============ 設定 ============ -->
-  <section class="view" id="v-conf">
+  <!-- ============ 表現集 ============ -->
+  <section class="view" id="v-phrase">
     <div class="card">
-      <h2>AI接続設定</h2>
+      <h2>翻訳・表現集</h2>
+      <p class="desc">日本語・トルコ語の両方向から検索できます。</p>
+      <div class="chips" id="phraseCats"></div>
+      <input id="phraseSearch" placeholder="例: ありがとう / teşekkür / 病院">
+      <div id="phraseList" style="margin-top:12px"></div>
+    </div>
+  </section>
+
+  <!-- ============ 発音練習 ============ -->
+  <section class="view" id="v-tts">
+    <div class="card">
+      <h2>発音練習</h2>
+      <p class="desc">ブラウザ標準の音声読み上げ（Speech Synthesis）で発音を確認します。APIや有料サービスは使いません。</p>
+      <input id="ttsInput" placeholder="読み上げたいトルコ語（例: Merhaba! Nasılsın?）">
+      <button id="btnTts" style="margin-top:12px">🔊 読み上げ</button>
+      <div class="tts-status" id="ttsStatus"></div>
+      <h2 style="margin-top:22px;font-size:15px">よく使う表現</h2>
+      <div class="chips" id="ttsPresets"></div>
+    </div>
+  </section>
+
+  <!-- ============ 練習問題 ============ -->
+  <section class="view" id="v-quiz">
+    <div class="card">
+      <h2>練習問題</h2>
+      <div class="chips" id="quizTabs">
+        <button data-q="word" class="on">単語クイズ</button>
+        <button data-q="gram">文法選択</button>
+        <button data-q="write">作文（日→土）</button>
+      </div>
+      <div id="quizBody"></div>
+    </div>
+  </section>
+
+  <!-- ============ 学習記録 ============ -->
+  <section class="view" id="v-stats">
+    <div class="card">
+      <h2>学習記録</h2>
+      <p class="desc">記録はこの端末のブラウザ（localStorage）にのみ保存されます。</p>
+      <div class="stat-grid" id="statGrid"></div>
+      <div style="margin-top:16px"><button class="ghost small" id="btnResetStats">学習記録をリセット</button></div>
+    </div>
+  </section>
+
+  <!-- ============ ChatGPT連携 ============ -->
+  <section class="view" id="v-gpt">
+    <div class="card">
+      <h2>ChatGPT連携</h2>
       <p class="desc">
-        このアプリはAPIキーを一切保存しません。AIとの通信は、あなたがデプロイしたAPIプロキシ（<code>backend/</code> フォルダのCloudflare Worker）経由で行われます。READMEの手順でデプロイし、発行されたURLを入力してください。
+        このアプリはAI APIを呼び出しません（課金なし・キー不要）。下のプロンプトをコピーして、ChatGPTに貼り付けるだけでAI会話・添削ができます。
       </p>
-      <label>APIプロキシURL <small>（例: https://turkish-ai.あなた名前.workers.dev）</small></label>
-      <input id="confProxy" placeholder="https://xxxx.workers.dev" autocomplete="off">
-      <label>会話レベル</label>
-      <div class="levels" id="confLevels"></div>
-      <button id="btnSaveConf" style="margin-top:14px">保存</button>
-      <span id="confMsg" class="status-ok" style="display:none;margin-left:10px">保存しました</span>
-    </div>
-    <div class="card">
-      <h2>データ管理</h2>
-      <p class="desc">会話履歴・間違えた文法・学んだ単語は、この端末のブラウザ（localStorage）に保存されます。</p>
-      <button class="ghost small" id="btnClearAll">すべての学習データを削除</button>
+      <label>会話レベル <small>（プロンプトに反映されます）</small></label>
+      <div class="chips" id="gptLevels"></div>
+
+      <h2 style="font-size:15px;margin-top:16px">1. トルコ語会話練習用プロンプト</h2>
+      <div class="prompt-box" id="gptPrompt1"></div>
+      <button class="small" id="btnCopy1" style="margin-top:8px">📋 プロンプトをコピー</button>
+      <span id="copyMsg1" class="status-ok" style="display:none;margin-left:8px">コピーしました</span>
+
+      <h2 style="font-size:15px;margin-top:20px">2. 文添削用プロンプト</h2>
+      <div class="prompt-box" id="gptPrompt2"></div>
+      <button class="small" id="btnCopy2" style="margin-top:8px">📋 プロンプトをコピー</button>
+      <span id="copyMsg2" class="status-ok" style="display:none;margin-left:8px">コピーしました</span>
+
+      <div style="margin-top:20px">
+        <button id="btnOpenGpt">🤖 ChatGPTを開く</button>
+        <span style="font-size:12px;color:var(--muted)">（chatgpt.com が新しいタブで開きます）</span>
+      </div>
     </div>
   </section>
 </main>
@@ -244,14 +293,12 @@ nav.tabs button.on{background:var(--red);color:#fff;border-color:var(--red)}
 <script>
 "use strict";
 /* ============================================================
-   Türkçe Companion — AI拡張版
-   モジュール構成:
-   1) Store  : localStorage 永続化（履歴・単語・間違い・設定）
-   2) AI     : APIプロキシ呼び出し（キーは保持しない）
-   3) Chat   : AI会話（文脈記憶・文法訂正カード）
-   4) Trans  : 双方向翻訳
-   5) History: 学習履歴・復習フラッシュカード
-   6) App    : タブ切替・初期化（既存3機能を維持）
+   Türkçe Companion — 完全オフライン版
+   ・外部API送信なし（OpenAI / Worker / 有料サービス不使用）
+   ・全コンテンツをアプリ内データとして収録
+   ・学習記録は localStorage 単一キーで管理
+   モジュール: Store / TTS / Vocab / Grammar / Phrase / TtsView /
+               Quiz / StatsView / GPT / App
 ============================================================ */
 
 /* ---------- 既存機能（元サイトからそのまま維持） ---------- */
@@ -279,517 +326,183 @@ function checkAnswer() {
   }
 }
 
-function speak() {
-  const text = document.getElementById("speech").value;
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "tr-TR";
-  utterance.rate = 0.85;
-  speechSynthesis.speak(utterance);
-}
+/* ---------- 検索・比較ユーティリティ（トルコ語ロケール対応） ---------- */
+const normTr = s => String(s || "").toLocaleLowerCase("tr");
+const normJp = s => String(s || "").normalize("NFKC")
+  .replace(/[\u30A1-\u30F6]/g, m => String.fromCharCode(m.charCodeAt(0) - 0x60)); // カタカナ→ひらがな
+const cleanTr = s => normTr(s).replace(/[.!?,:;'"()\s、。？！]/g, "");
 
-/* ---------- 1) Store ---------- */
+/* ---------- Store: 単一キー・バージョン付き localStorage ---------- */
 const Store = {
-  NS: "tc_v2_",
-  get(k, def){
-    try{ const v = localStorage.getItem(this.NS + k); return v ? JSON.parse(v) : def; }
-    catch(e){ return def; }
+  KEY: "tc_data",
+  d: null,
+  load(){
+    try{ this.d = JSON.parse(localStorage.getItem(this.KEY)); }catch(e){ this.d = null; }
+    if(!this.d || this.d.v !== 1){
+      this.d = { v:1, fav:[], learned:[], ans:{ok:0,ng:0}, days:[], write:[], level:"A1" };
+    }
+    return this.d;
   },
-  set(k, v){ localStorage.setItem(this.NS + k, JSON.stringify(v)); },
-  push(k, item){
-    const arr = this.get(k, []);
-    arr.push(item);
-    this.set(k, arr);
-    return arr;
+  save(){ localStorage.setItem(this.KEY, JSON.stringify(this.d)); },
+  markDay(){
+    const t = new Date().toISOString().slice(0,10);
+    if(!this.d.days.includes(t)){ this.d.days.push(t); this.save(); }
   },
-  removeAt(k, idx){
-    const arr = this.get(k, []);
-    arr.splice(idx, 1);
-    this.set(k, arr);
+  toggle(arrName, val){
+    const arr = this.d[arrName];
+    const i = arr.indexOf(val);
+    if(i >= 0) arr.splice(i,1); else arr.push(val);
+    this.save();
   },
-  clearAll(){ ["chat","mistakes","words","conf"].forEach(k => localStorage.removeItem(this.NS + k)); }
+  answer(ok){
+    ok ? this.d.ans.ok++ : this.d.ans.ng++;
+    this.save();
+  }
 };
 
-/* ---------- 2) AI 呼び出し（プロキシ経由・キー非保持） ---------- */
-const AI = {
-  configured(){ return !!Store.get("conf", {}).proxy; },
-  proxy(){ return (Store.get("conf", {}).proxy || "").replace(/\/+$/, ""); },
-  level(){ return Store.get("conf", {}).level || "A1"; },
-
-  async chat(messages){
-    if(!this.configured()) throw new Error("AIバックエンドが未設定です。設定タブでプロキシURLを保存してください。");
-    let res;
-    try{
-      res = await fetch(this.proxy() + "/api/chat", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify({ level: this.level(), messages })
-      });
-    }catch(e){
-      throw new Error("プロキシに接続できません。URLとWorkerの起動を確認してください。");
-    }
-    if(!res.ok){
-      let d = "";
-      try{ d = (await res.json()).error || ""; }catch(e){}
-      throw new Error("APIエラー (" + res.status + ") " + d);
-    }
-    const data = await res.json();
-    return {
-      reply: data.reply || "",
-      replyJp: data.reply_jp || "",
-      correction: data.correction || null,
-      original: data.original || null,
-      reasonJp: data.reason_jp || "",
-      alternativesOk: !!data.alternatives_ok,
-      newWords: Array.isArray(data.new_words) ? data.new_words : []
+/* ---------- TTS: iOS Safari対応（ユーザー操作起点・voiceschanged） ---------- */
+const TTS = {
+  voice: null, checked: false,
+  init(){
+    if(!("speechSynthesis" in window)){ this.checked = true; return; }
+    const load = () => {
+      const vs = speechSynthesis.getVoices();
+      this.voice = vs.find(v => /^tr(-|_)TR$/i.test(v.lang))
+                || vs.find(v => /^tr/i.test(v.lang)) || null;
+      this.checked = true;
+      document.dispatchEvent(new CustomEvent("tts-ready"));
     };
+    if("onvoiceschanged" in speechSynthesis) speechSynthesis.onvoiceschanged = load;
+    load(); // 一部ブラウザは即時取得のみ
   },
-
-  async translate(text, dir){
-    if(!this.configured()) throw new Error("AIバックエンドが未設定です。設定タブでプロキシURLを保存してください。");
-    let res;
-    try{
-      res = await fetch(this.proxy() + "/api/translate", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify({ text, direction: dir, level: this.level() })
-      });
-    }catch(e){
-      throw new Error("プロキシに接続できません。URLとWorkerの起動を確認してください。");
-    }
-    if(!res.ok){
-      let d = "";
-      try{ d = (await res.json()).error || ""; }catch(e){}
-      throw new Error("APIエラー (" + res.status + ") " + d);
-    }
-    return res.json();
+  statusText(){
+    if(!("speechSynthesis" in window)) return "このブラウザは音声読み上げに対応していません。";
+    if(this.voice) return "✅ トルコ語音声を使用します: " + this.voice.name;
+    return "⚠️ トルコ語の音声ボイスが見つかりません。iPadの「設定 → アクセシビリティ → 読み上げコンテンツ → 声」でトルコ語の声を追加すると読み上げできるようになります。";
+  },
+  speak(text){
+    // 必ずユーザーのタップから呼ばれること（iOSの制約）
+    if(!("speechSynthesis" in window)){ alert("このブラウザは音声読み上げに対応していません。"); return; }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    if(this.voice) u.voice = this.voice;
+    u.lang = "tr-TR";
+    u.rate = 0.85;
+    speechSynthesis.speak(u);
   }
 };
 
-/* ---------- 3) AI会話 ---------- */
-const Chat = {
-  busy: false,
-  msgsEl: document.getElementById("msgs"),
-  emptyEl: document.getElementById("chatEmpty"),
+/* ---------- 収録データ（アプリ内完結・API不要） ---------- */
+const VOCAB = [
+  // ---- A1 ----
+  { lvl:"A1", tr:"ev", jp:"家", ex:"Benim evim çok güzel.", exjp:"私の家はとてもきれいです。" },
+  { lvl:"A1", tr:"okul", jp:"学校", ex:"Çocuklar okula gidiyor.", exjp:"子どもたちは学校へ行きます。" },
+  { lvl:"A1", tr:"su", jp:"水", ex:"Bir bardak su istiyorum.", exjp:"コップ1杯の水が欲しいです。" },
+  { lvl:"A1", tr:"ekmek", jp:"パン", ex:"Her sabah ekmek alırım.", exjp:"毎朝パンを買います。" },
+  { lvl:"A1", tr:"çay", jp:"茶", ex:"Bir çay lütfen.", exjp:"お茶を一杯ください。" },
+  { lvl:"A1", tr:"kahve", jp:"コーヒー", ex:"Türk kahvesi çok ünlüdür.", exjp:"トルココーヒーはとても有名です。" },
+  { lvl:"A1", tr:"süt", jp:"牛乳", ex:"Kahveye süt koyar mısın?", exjp:"コーヒーにミルクを入れてくれますか。" },
+  { lvl:"A1", tr:"elma", jp:"りんご", ex:"Her sabah bir elma yerim.", exjp:"毎朝りんごを1個食べます。" },
+  { lvl:"A1", tr:"kitap", jp:"本", ex:"Bu kitap çok ilginç.", exjp:"この本はとても面白いです。" },
+  { lvl:"A1", tr:"arkadaş", jp:"友達", ex:"Arkadaşım ile sinemaya gidiyoruz.", exjp:"友達と一緒に映画館へ行きます。" },
+  { lvl:"A1", tr:"anne", jp:"母", ex:"Annem yemek yapıyor.", exjp:"母は料理を作っています。" },
+  { lvl:"A1", tr:"baba", jp:"父", ex:"Babam öğretmendir.", exjp:"父は教師です。" },
+  { lvl:"A1", tr:"öğretmen", jp:"教師", ex:"O, iyi bir öğretmen.", exjp:"彼はいい教師です。" },
+  { lvl:"A1", tr:"öğrenci", jp:"学生", ex:"Ben üniversitede öğrenciyim.", exjp:"私は大学の学生です。" },
+  { lvl:"A1", tr:"yemek", jp:"料理・食事", ex:"Türk yemeği çok lezzetli.", exjp:"トルコ料理はとてもおいしいです。" },
+  { lvl:"A1", tr:"güzel", jp:"きれいな・良い", ex:"Hava bugün çok güzel.", exjp:"今日はとてもいい天気です。" },
+  { lvl:"A1", tr:"büyük", jp:"大きい", ex:"Bu şehir çok büyük.", exjp:"この街はとても大きいです。" },
+  { lvl:"A1", tr:"küçük", jp:"小さい", ex:"Küçük bir dükkân arıyoruz.", exjp:"小さな店を探しています。" },
+  { lvl:"A1", tr:"yeni", jp:"新しい", ex:"Yeni bir telefon aldım.", exjp:"新しい携帯を買いました。" },
+  { lvl:"A1", tr:"eski", jp:"古い", ex:"Eski bir araba sürüyorum.", exjp:"古い車に乗っています。" },
+  { lvl:"A1", tr:"gitmek", jp:"行く", ex:"Yarın İstanbul'a gidiyoruz.", exjp:"明日イスタンブールへ行きます。" },
+  { lvl:"A1", tr:"gelmek", jp:"来る", ex:"Akşam bize gel.", exjp:"夕方私たちのところへ来て。" },
+  { lvl:"A1", tr:"sevmek", jp:"好き・愛する", ex:"Ben Türkçeyi çok seviyorum.", exjp:"私はトルコ語が大好きです。" },
+  { lvl:"A1", tr:"yapmak", jp:"する・作る", ex:"Ne yapıyorsun?", exjp:"何をしていますか。" },
+  { lvl:"A1", tr:"sabah", jp:"朝", ex:"Sabah erken kalkıyorum.", exjp:"朝は早く起きます。" },
+  { lvl:"A1", tr:"akşam", jp:"夕方・晩", ex:"Akşam yemeği hazır.", exjp:"夕食の用意ができました。" },
+  { lvl:"A1", tr:"gece", jp:"夜", ex:"Dün gece film izledim.", exjp:"昨夜は映画を見ました。" },
+  { lvl:"A1", tr:"gün", jp:"日", ex:"İyi günler!", exjp:"よい一日を！" },
+  { lvl:"A1", tr:"bugün", jp:"今日", ex:"Bugün hava yağmurlu.", exjp:"今日は雨です。" },
+  { lvl:"A1", tr:"yarın", jp:"明日", ex:"Yarın görüşürüz.", exjp:"また明日。" },
+  { lvl:"A1", tr:"araba", jp:"車", ex:"Arabam yok, otobüsle gidiyorum.", exjp:"車がないのでバスで行きます。" },
+  { lvl:"A1", tr:"oda", jp:"部屋", ex:"Odam çok aydınlık.", exjp:"私の部屋はとても明るいです。" },
+  { lvl:"A1", tr:"saat", jp:"時計・時間", ex:"Saat kaç?", exjp:"今何時ですか。" },
+  { lvl:"A1", tr:"para", jp:"お金", ex:"Param yok.", exjp:"お金がありません。" },
+  { lvl:"A1", tr:"iş", jp:"仕事", ex:"İşim çok yoğun.", exjp:"仕事がとても忙しいです。" },
+  // ---- A2 ----
+  { lvl:"A2", tr:"konuşmak", jp:"話す", ex:"Türkçe biraz konuşuyorum.", exjp:"少しだけトルコ語を話します。" },
+  { lvl:"A2", tr:"anlamak", jp:"理解する", ex:"Anlamıyorum, tekrar eder misin?", exjp:"分かりません、もう一度言ってもらえますか。" },
+  { lvl:"A2", tr:"çalışmak", jp:"勉強する・働く", ex:"Her gün Türkçe çalışıyorum.", exjp:"毎日トルコ語を勉強しています。" },
+  { lvl:"A2", tr:"beklemek", jp:"待つ", ex:"Otobüs bekliyorum.", exjp:"バスを待っています。" },
+  { lvl:"A2", tr:"bulmak", jp:"見つける", ex:"Anahtarımı bulamıyorum.", exjp:"鍵が見つかりません。" },
+  { lvl:"A2", tr:"soru", jp:"質問", ex:"Bir sorum var.", exjp:"質問があります。" },
+  { lvl:"A2", tr:"cevap", jp:"答え", ex:"Bu sorunun cevabını bilmiyorum.", exjp:"この質問の答えが分かりません。" },
+  { lvl:"A2", tr:"hastane", jp:"病院", ex:"Hastane nerede?", exjp:"病院はどこですか。" },
+  { lvl:"A2", tr:"ilaç", jp:"薬", ex:"Bu ilacı yemekten sonra al.", exjp:"この薬は食後に飲んでください。" },
+  { lvl:"A2", tr:"otobüs", jp:"バス", ex:"Otobüs durağı uzak mı?", exjp:"バス停は遠いですか。" },
+  { lvl:"A2", tr:"tren", jp:"列車", ex:"Tren saat dokuzda kalkıyor.", exjp:"列車は9時に出発します。" },
+  { lvl:"A2", tr:"uçak", jp:"飛行機", ex:"Uçakla gitmek daha hızlı.", exjp:"飛行機で行く方が速いです。" },
+  { lvl:"A2", tr:"tatil", jp:"休暇", ex:"Yazın tatile gideceğiz.", exjp:"夏に休暇へ行く予定です。" },
+  { lvl:"A2", tr:"hava", jp:"天気・空気", ex:"Yarın hava yağmurlu olacak.", exjp:"明日は雨になるでしょう。" },
+  { lvl:"A2", tr:"yaz", jp:"夏", ex:"Yazın denize gireriz.", exjp:"夏には海に入ります。" },
+  { lvl:"A2", tr:"kış", jp:"冬", ex:"Kışın kar yağıyor.", exjp:"冬には雪が降ります。" },
+  // ---- B1 ----
+  { lvl:"B1", tr:"karar", jp:"決断・決定", ex:"Karar verdim, bu yıl Türkçeyi ilerleteceğim.", exjp:"決めました、今年はトルコ語を上達させます。" },
+  { lvl:"B1", tr:"fırsat", jp:"機会", ex:"Bu fırsatı kaçırmak istemiyorum.", exjp:"この機会を逃したくありません。" },
+  { lvl:"B1", tr:"alışmak", jp:"慣れる", ex:"Yeni şehre yavaş yavaş alışıyorum.", exjp:"新しい街に少しずつ慣れています。" },
+  { lvl:"B1", tr:"başarmak", jp:"成し遂げる", ex:"Çalışırsan bu sınavı başarırsın.", exjp:"努力すればその試験に合格できます。" },
+  { lvl:"B1", tr:"deneyim", jp:"経験", ex:"Yurt dışında çalışma deneyimim var.", exjp:"海外で働いた経験があります。" },
+  { lvl:"B1", tr:"etkilemek", jp:"影響を与える", ex:"Bu haber beni çok etkiledi.", exjp:"このニュースにとても心を動かされました。" },
+  { lvl:"B1", tr:"gelişim", jp:"成長・上達", ex:"Türkçemde büyük bir gelişim var.", exjp:"私のトルコ語は大きく上達しました。" },
+  { lvl:"B1", tr:"olasılık", jp:"可能性", ex:"Yağmur olasılığı yüksek görünüyor.", exjp:"雨の可能性が高そうです。" },
+  // ---- B2 ----
+  { lvl:"B2", tr:"varsayım", jp:"仮定", ex:"Bu sadece bir varsayımdır.", exjp:"これは単なる仮定にすぎません。" },
+  { lvl:"B2", tr:"kanıt", jp:"証拠", ex:"Bu iddiayı destekleyecek kanıt yok.", exjp:"この主張を裏付ける証拠はありません。" },
+  { lvl:"B2", tr:"katkı", jp:"貢献", ex:"Eğitime katkıda bulunmak istiyorum.", exjp:"教育に貢献したいと思っています。" },
+  { lvl:"B2", tr:"eleştiri", jp:"批判", ex:"Yapıcı eleştiri gelişim için gereklidir.", exjp:"建設的な批判は成長に必要です。" },
+  { lvl:"B2", tr:"çelişki", jp:"矛盾", ex:"Söyledikleri arasında çelişki var.", exjp:"彼の発言には矛盾があります。" },
+  { lvl:"B2", tr:"düşünce", jp:"考え", ex:"Farklı düşüncelere saygı duymalıyız.", exjp:"異なる考えを尊重すべきです。" }
+];
 
-  history(){ return Store.get("chat", []); },
-
-  refreshNotice(){
-    document.getElementById("backendNotice").style.display = AI.configured() ? "none" : "block";
+const GRAMMAR = [
+  {
+    lv:"A1", t:"母音調和（2方式と4方式）",
+    exp:[
+      "トルコ語の接尾辞の母音は、<b>直前の語の最終母音</b>に合わせて変化します。これを<b>母音調和</b>と呼びます。",
+      "<b>2方式</b>: 最終母音が前母音（e・i・ö・ü）なら接尾辞は <b>-e / -de</b>、後母音（a・ı・o・u）なら <b>-a / -da</b> になります。",
+      "<b>4方式</b>: 対格などは4通り。<b>-i / -ı / -u / -ü</b> を最終母音に合わせて選びます（e,i→i／a,ı→ı／o,u→u／ö,ü→ü）。"
+    ],
+    ex:[
+      { tr:"ev → evde (家で)", jp:"最終母音 e なので -de" },
+      { tr:"okul → okulda (学校で)", jp:"最終母音 u なので -da" },
+      { tr:"ev → eve (家へ)", jp:"2方式: 前母音なら -e" },
+      { tr:"kitap → kitabı (その本を)", jp:"4方式: a なので -ı" }
+    ],
+    q:[
+      { q:"「masa（テーブル）」に「〜で」の意味の接尾辞を付けると？", opts:["masada","masede","masıda","masüde"], a:0,
+        expl:"最終母音が a（後母音）なので、位格は -da になります。「masada」＝テーブルの上で。" },
+      { q:"「ev（家）」に「〜へ」の意味の接尾辞を付けると？", opts:["eva","eve","evıa","evü"], a:1,
+        expl:"最終母音が e（前母音）なので、与格は -e。「eve」＝家へ。" }
+    ]
   },
-
-  renderAll(){
-    this.msgsEl.innerHTML = "";
-    this.history().forEach(m => this.renderMsg(m, false));
-    this.refreshEmpty();
+  {
+    lv:"A1", t:"複数接尾辞 -ler / -lar",
+    exp:[
+      "複数は最終母音が前母音なら <b>-ler</b>、後母音なら <b>-lar</b> を付けます。",
+      "数詞があるときは複数形にしません:「üç kitap」（3冊の本）、「iki ev」（2軒の家）。"
+    ],
+    ex:[
+      { tr:"kitap → kitaplar", jp:"本 → 本（複数）" },
+      { tr:"okul → okullar", jp:"学校 → 学校（複数）" },
+      { tr:"gözlük → gözlükler", jp:"めがね → めがね（複数）" },
+      { tr:"üç kitap", jp:"数詞があるので単数形のまま" }
+    ],
+    q:[
+      { q:"「çocuk（子ども）」の複数形は？", opts:["çocukler","çocuklar","çocuqlar","çocukları"], a:1,
+        expl:"最終母音 u は後母音なので -lar。「çocuklar」＝子どもたち。" }
+    ]
   },
-  refreshEmpty(){
-    this.emptyEl.style.display = this.msgsEl.children.length ? "none" : "block";
-  },
-
-  renderMsg(m, persist){
-    const wrap = document.createElement("div");
-    if(m.role === "user"){
-      wrap.className = "msg user";
-      const b = document.createElement("div");
-      b.className = "bubble";
-      b.textContent = m.content;
-      wrap.appendChild(b);
-    }else{
-      wrap.className = "msg ai";
-      const b = document.createElement("div");
-      b.className = "bubble";
-      b.textContent = m.reply;
-      wrap.appendChild(b);
-      if(m.replyJp){
-        const tr = document.createElement("div");
-        tr.className = "trjp";
-        tr.textContent = "訳: " + m.replyJp;
-        wrap.appendChild(tr);
-      }
-      if(m.correction){
-        wrap.appendChild(this.buildFixCard(m));
-      }
-      if(m.newWords && m.newWords.length){
-        const chips = document.createElement("div");
-        chips.className = "wordchips";
-        m.newWords.forEach(w => {
-          const s = document.createElement("span");
-          s.textContent = w.tr + " = " + w.jp;
-          chips.appendChild(s);
-        });
-        wrap.appendChild(chips);
-      }
-    }
-    this.msgsEl.appendChild(wrap);
-    this.refreshEmpty();
-    if(persist) this.scrollBottom();
-  },
-
-  buildFixCard(m){
-    const fc = document.createElement("div");
-    fc.className = "fix-card";
-    if(m.alternativesOk){
-      const badge = document.createElement("span");
-      badge.className = "ok-badge";
-      badge.textContent = "文法的に正しい別の表現として認めます";
-      fc.appendChild(badge);
-    }else{
-      const o = document.createElement("div");
-      o.innerHTML = '<div class="lbl">あなたの文</div>';
-      const ov = document.createElement("div");
-      ov.appendChild(document.createElement("del")).textContent = m.original || "";
-      o.appendChild(ov);
-      const c = document.createElement("div");
-      c.innerHTML = '<div class="lbl">自然な表現</div>';
-      const cv = document.createElement("div");
-      cv.appendChild(document.createElement("ins")).textContent = m.correction;
-      c.appendChild(cv);
-      const r = document.createElement("div");
-      r.innerHTML = '<div class="lbl">解説</div>';
-      const rv = document.createElement("div");
-      rv.textContent = m.reasonJp || "";
-      r.appendChild(rv);
-      fc.appendChild(o); fc.appendChild(c); fc.appendChild(r);
-    }
-    const btn = document.createElement("button");
-    btn.className = "ghost small";
-    btn.style.marginTop = "10px";
-    btn.textContent = "この表現を単語帳に保存";
-    btn.onclick = () => History.addWord(m.correction, m.reasonJp || (m.replyJp || ""), btn);
-    fc.appendChild(btn);
-    return fc;
-  },
-
-  scrollBottom(){
-    window.scrollTo({ top: document.body.scrollHeight, behavior:"smooth" });
-  },
-
-  async send(){
-    if(this.busy) return;
-    const inputEl = document.getElementById("chatInput");
-    const text = inputEl.value.trim();
-    if(!text) return;
-    if(!AI.configured()){ alert("先に設定タブでAPIプロキシURLを保存してください。"); return; }
-
-    inputEl.value = ""; inputEl.style.height = "48px";
-
-    const hist = this.history();
-    hist.push({ role:"user", content:text });
-    Store.set("chat", hist);
-    this.renderMsg({ role:"user", content:text });
-    this.scrollBottom();
-
-    // 文脈記憶: 直近20件 + システム相当の最初のユーザ文脈を送る
-    const context = hist.slice(-20).map(m =>
-      m.role === "user"
-        ? { role:"user", content:m.content }
-        : { role:"assistant", content: JSON.stringify({
-            reply:m.reply, correction:m.correction, reason_jp:m.reasonJp,
-            alternatives_ok:!!m.alternativesOk, new_words:m.newWords || []
-          }) }
-    );
-
-    this.busy = true;
-    document.getElementById("btnSend").disabled = true;
-    const typing = document.createElement("div");
-    typing.className = "typing";
-    typing.innerHTML = "<i></i><i></i><i></i>";
-    this.msgsEl.appendChild(typing);
-    this.scrollBottom();
-
-    try{
-      const out = await AI.chat(context);
-      typing.remove();
-      const aiMsg = {
-        role:"assistant", reply: out.reply, replyJp: out.replyJp,
-        correction: out.correction, original: out.original,
-        reasonJp: out.reasonJp, alternativesOk: out.alternativesOk,
-        newWords: out.newWords
-      };
-      const h2 = this.history();
-      h2.push(aiMsg);
-      Store.set("chat", h2);
-      this.renderMsg(aiMsg);
-
-      // 間違えた文法を自動記録
-      if(out.correction && !out.alternativesOk){
-        Store.push("mistakes", {
-          original: out.original || "", corrected: out.correction,
-          reason: out.reasonJp || "", ts: Date.now()
-        });
-      }
-      // 新しい単語を自動記録
-      (out.newWords || []).forEach(w => {
-        const words = Store.get("words", []);
-        if(!words.some(x => x.tr === w.tr)) Store.push("words", { tr:w.tr, jp:w.jp || "", ts: Date.now() });
-      });
-    }catch(err){
-      typing.remove();
-      this.renderMsg({ role:"assistant", reply:"⚠️ " + err.message });
-    }finally{
-      this.busy = false;
-      document.getElementById("btnSend").disabled = false;
-      this.scrollBottom();
-    }
-  },
-
-  clear(){
-    if(!confirm("会話履歴を削除して新しい会話を始めますか？（単語帳・間違い記録は残ります）")) return;
-    Store.set("chat", []);
-    this.renderAll();
-  }
-};
-
-/* ---------- 4) 翻訳 ---------- */
-const Trans = {
-  dir: "auto",
-  async run(){
-    const text = document.getElementById("transInput").value.trim();
-    if(!text){ alert("翻訳する文章を入力してください。"); return; }
-    if(!AI.configured()){ alert("先に設定タブでAPIプロキシURLを保存してください。"); return; }
-    const btn = document.getElementById("btnTrans");
-    btn.disabled = true; btn.textContent = "翻訳中…";
-    const out = document.getElementById("transResult");
-    out.innerHTML = "";
-    try{
-      const r = await AI.translate(text, this.dir);
-      const detected = r.detected ? "（判定: " + (r.detected === "ja" ? "日本語" : "トルコ語") + "）" : "";
-      out.innerHTML = '<div class="main"></div><div class="notes"></div>';
-      out.querySelector(".main").textContent = (r.translation || "") + " " + detected;
-      out.querySelector(".notes").textContent = r.notes || "";
-      // トルコ語の訳結果は単語帳に保存可能
-      if(r.translation && r.detected !== "ja"){
-        const save = document.createElement("button");
-        save.className = "ghost small";
-        save.style.marginTop = "10px";
-        save.textContent = "この表現を単語帳に保存";
-        save.onclick = () => History.addWord(r.translation, (r.notes || "").split("\n")[0], save);
-        out.appendChild(save);
-      }
-    }catch(err){
-      out.innerHTML = '<div class="empty">⚠️ ' + err.message + '</div>';
-    }finally{
-      btn.disabled = false; btn.textContent = "翻訳する";
-    }
-  }
-};
-
-/* ---------- 5) 学習履歴・復習 ---------- */
-const History = {
-  tab: "chat",
-  deck: [], idx: 0, revealed: false, known: 0, again: 0,
-
-  addWord(tr, jp, btn){
-    if(!tr) return;
-    const words = Store.get("words", []);
-    if(words.some(w => w.tr === tr)){ if(btn){ btn.textContent = "保存済みです"; btn.disabled = true; } return; }
-    Store.push("words", { tr, jp: jp || "", ts: Date.now() });
-    if(btn){ btn.textContent = "保存しました ✓"; btn.disabled = true; }
-  },
-
-  render(){
-    const body = document.getElementById("histBody");
-    body.innerHTML = "";
-    if(this.tab === "review"){ this.renderReview(body); return; }
-    const key = this.tab;
-    const list = Store.get(key, []).slice().reverse();
-    if(!list.length){
-      body.innerHTML = '<div class="empty">データはまだありません。</div>';
-      return;
-    }
-    list.forEach((item, ridx) => {
-      const idx = list.length - 1 - ridx;
-      const div = document.createElement("div");
-      div.className = "item";
-      const txt = document.createElement("div");
-      if(key === "chat"){
-        if(item.role === "user"){ txt.innerHTML = '<div class="t"></div>'; txt.querySelector(".t").textContent = item.content; }
-        else{
-          txt.innerHTML = '<div class="t"></div><div class="s"></div>';
-          txt.querySelector(".t").textContent = item.reply || "";
-          txt.querySelector(".s").textContent = item.replyJp || "";
-        }
-      }else if(key === "mistakes"){
-        txt.innerHTML = '<div class="t"></div><div class="s"></div>';
-        txt.querySelector(".t").innerHTML = "";
-        const del0 = document.createElement("del"); del0.textContent = item.original;
-        const ins0 = document.createElement("ins"); ins0.textContent = item.corrected; ins0.style.cssText="color:var(--red);font-weight:700";
-        const tw = txt.querySelector(".t");
-        tw.appendChild(del0); tw.appendChild(document.createTextNode(" → ")); tw.appendChild(ins0);
-        txt.querySelector(".s").textContent = item.reason || "";
-      }else{ // words
-        txt.innerHTML = '<div class="t"></div><div class="s"></div>';
-        txt.querySelector(".t").textContent = item.tr;
-        txt.querySelector(".s").textContent = item.jp || "";
-      }
-      const del = document.createElement("button");
-      del.className = "del"; del.textContent = "🗑";
-      del.onclick = () => { Store.removeAt(key, idx); this.render(); };
-      div.appendChild(txt); div.appendChild(del);
-      body.appendChild(div);
-    });
-  },
-
-  renderReview(body){
-    const words = Store.get("words", []);
-    const mistakes = Store.get("mistakes", []);
-    if(this.deck.length && this.idx <= this.deck.length){
-      // フラッシュカード進行中
-      body.innerHTML = "";
-      if(this.idx >= this.deck.length){
-        body.innerHTML = '<div class="empty"><b>復習完了！</b><br>わかった: ' + this.known + '件 ／ もう一度: ' + this.again + '件</div>' +
-          '<button id="btnReRestart">もう一度復習する</button><button class="ghost" id="btnReBack">一覧に戻る</button>';
-        body.querySelector("#btnReRestart").onclick = () => this.startReview();
-        body.querySelector("#btnReBack").onclick = () => { this.deck = []; this.render(); };
-        return;
-      }
-      const card = this.deck[this.idx];
-      body.innerHTML =
-        '<div style="font-size:12.5px;color:var(--muted);margin-bottom:8px" id="fprog"></div>' +
-        '<div class="flash' + (this.revealed ? " tr" : "") + '" id="fcard">' +
-        '<div class="lang">' + (this.revealed ? "TÜRKÇE" : "日本語") + '</div>' +
-        '<div class="word"></div><div class="hint"></div></div>' +
-        '<div class="graderow" style="display:' + (this.revealed ? "flex" : "none") + '">' +
-        '<button class="ghost" id="fAgain">もう一度</button><button id="fKnown">わかった</button></div>';
-      body.querySelector("#fprog").textContent = (this.idx + 1) + " / " + this.deck.length;
-      body.querySelector(".word").textContent = this.revealed ? card.tr : (card.jp || card.tr);
-      body.querySelector(".hint").textContent = this.revealed ? (card.jp || "") : "タップしてトルコ語の答えを見る";
-      body.querySelector("#fcard").onclick = () => { this.revealed = true; this.render(); };
-      body.querySelector("#fKnown").onclick = () => this.grade(true);
-      body.querySelector("#fAgain").onclick = () => this.grade(false);
-      return;
-    }
-    // 一覧
-    body.innerHTML = '<p class="desc">単語帳 ' + words.length + '件・間違い記録 ' + mistakes.length + '件から復習できます。</p>';
-    if(!words.length && !mistakes.length){
-      body.innerHTML += '<div class="empty">AI会話や翻訳で保存した表現がここに表示されます。</div>';
-      return;
-    }
-    if(words.length){
-      const b = document.createElement("button");
-      b.textContent = "単語帳から復習を開始（" + words.length + "件）";
-      b.onclick = () => this.startReview(Store.get("words", []).map(w => ({ tr:w.tr, jp:w.jp })));
-      body.appendChild(b);
-    }
-    if(mistakes.length){
-      const b2 = document.createElement("button");
-      b2.className = "ghost";
-      b2.textContent = "間違えた文を復習（" + mistakes.length + "件）";
-      b2.onclick = () => this.startReview(Store.get("mistakes", []).map(m => ({ tr:m.corrected, jp:m.reason })));
-      body.appendChild(b2);
-    }
-  },
-
-  startReview(cards){
-    this.deck = cards.slice().sort(() => Math.random() - .5);
-    this.idx = 0; this.revealed = false; this.known = 0; this.again = 0;
-    this.render();
-  },
-  grade(ok){
-    if(!this.revealed) return;
-    if(ok){ this.known++; }
-    else{ this.again++; this.deck.push(this.deck[this.idx]); }
-    this.idx++; this.revealed = false;
-    this.render();
-  }
-};
-
-/* ---------- 6) タブ切替・初期化 ---------- */
-function switchView(v){
-  document.querySelectorAll(".view").forEach(s => s.classList.toggle("on", s.id === "v-" + v));
-  document.querySelectorAll("nav.tabs button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
-  window.scrollTo(0, 0);
-  if(v === "chat") Chat.refreshNotice();
-  if(v === "hist") History.render();
-  if(v === "conf") fillConf();
-}
-
-function setLevelUI(level){
-  document.querySelectorAll("#levels button, #confLevels button").forEach(b =>
-    b.classList.toggle("on", b.dataset.l === level));
-}
-
-function init(){
-  // 設定の復元
-  const conf = Store.get("conf", { proxy:"", level:"A1" });
-  setLevelUI(conf.level || "A1");
-
-  // 既存機能のEnter対応
-  document.getElementById("answer").addEventListener("keydown", e => { if(e.key === "Enter") checkAnswer(); });
-  document.getElementById("speech").addEventListener("keydown", e => { if(e.key === "Enter") speak(); });
-
-  // タブ
-  document.querySelectorAll("nav.tabs button").forEach(b =>
-    b.addEventListener("click", () => switchView(b.dataset.v)));
-
-  // レベル
-  document.querySelectorAll("#levels button, #confLevels button").forEach(b =>
-    b.addEventListener("click", () => {
-      setLevelUI(b.dataset.l);
-      Store.set("conf", Object.assign(Store.get("conf", {}), { level: b.dataset.l }));
-    }));
-  // 設定タブ内レベル行の生成
-  document.getElementById("confLevels").innerHTML = document.getElementById("levels").innerHTML;
-  document.querySelectorAll("#confLevels button").forEach(b =>
-    b.addEventListener("click", () => {
-      setLevelUI(b.dataset.l);
-      Store.set("conf", Object.assign(Store.get("conf", {}), { level: b.dataset.l }));
-    }));
-
-  // チャット
-  document.getElementById("btnSend").addEventListener("click", () => Chat.send());
-  document.getElementById("btnClearChat").addEventListener("click", () => Chat.clear());
-  document.getElementById("chatInput").addEventListener("keydown", e => {
-    if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); Chat.send(); }
-  });
-  document.getElementById("chatInput").addEventListener("input", e => {
-    e.target.style.height = "48px";
-    e.target.style.height = Math.min(e.target.scrollHeight, 130) + "px";
-  });
-  Chat.renderAll();
-
-  // 翻訳
-  document.querySelectorAll("#dirRow button").forEach(b =>
-    b.addEventListener("click", () => {
-      document.querySelectorAll("#dirRow button").forEach(x => x.classList.remove("on"));
-      b.classList.add("on");
-      Trans.dir = b.dataset.d;
-    }));
-  document.getElementById("btnTrans").addEventListener("click", () => Trans.run());
-
-  // 履歴
-  document.querySelectorAll("#histTabs button").forEach(b =>
-    b.addEventListener("click", () => {
-      document.querySelectorAll("#histTabs button").forEach(x => x.classList.remove("on"));
-      b.classList.add("on");
-      History.tab = b.dataset.h;
-      History.deck = []; History.idx = 0;
-      History.render();
-    }));
-
-  // 設定
-  document.getElementById("btnSaveConf").addEventListener("click", () => {
-    Store.set("conf", Object.assign(Store.get("conf", {}), { proxy: document.getElementById("confProxy").value.trim() }));
-    Chat.refreshNotice();
-    const m = document.getElementById("confMsg");
-    m.style.display = "inline";
-    setTimeout(() => m.style.display = "none", 2000);
-  });
-  document.getElementById("btnClearAll").addEventListener("click", () => {
-    if(!confirm("会話履歴・間違い記録・単語帳をすべて削除しますか？元に戻せません。")) return;
-    Store.clearAll();
-    Chat.renderAll();
-    alert("削除しました。");
-  });
-
-  fillConf();
-}
-function fillConf(){
-  const c = Store.get("conf", {});
-  document.getElementById("confProxy").value = c.proxy || "";
-  setLevelUI(c.level || "A1");
-}
-document.addEventListener("DOMContentLoaded", init);
-</script>
-</body>
-</html>
+  {
+    lv:"A1", t:"人称所有接尾辞（benim evim など）",
+    exp:
