@@ -1,85 +1,260 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Türkçe Companion</title>
 <style>
-body {
-  font-family: system-ui, sans-serif;
-  background: #f7f7fa;
-  margin: 0;
-  color: #222;
+:root{
+  --red:#c8102e; --red-dark:#a30d25; --red-soft:#fbeaee;
+  --ink:#222; --muted:#777; --bg:#f7f7fa; --card:#fff;
+  --radius:16px; --shadow:0 3px 12px #0001;
+  --green:#1d7a3a; --green-soft:#e8f6ec;
 }
-header {
-  background: #c8102e;
-  color: white;
-  padding: 24px;
-  text-align: center;
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:system-ui,-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;
+  background:var(--bg); color:var(--ink);
+  padding-bottom:calc(70px + env(safe-area-inset-bottom));
 }
-main {
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
+header{
+  background:var(--red); color:#fff; padding:20px 16px;
+  padding-top:calc(20px + env(safe-area-inset-top));
+  text-align:center; position:sticky; top:0; z-index:20;
 }
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 16px;
-  margin: 16px 0;
-  box-shadow: 0 3px 12px #0001;
+header h1{font-size:22px}
+header p{font-size:13px;opacity:.9;margin-top:4px}
+main{max-width:800px;margin:auto;padding:16px}
+.card{
+  background:var(--card); padding:20px; border-radius:var(--radius);
+  margin:16px 0; box-shadow:var(--shadow);
 }
-button {
-  background: #c8102e;
-  color: white;
-  border: none;
-  padding: 12px 18px;
-  border-radius: 10px;
-  cursor: pointer;
-  margin: 5px;
+.card h2{font-size:18px;margin-bottom:10px;color:var(--ink)}
+.card p.desc{font-size:13.5px;color:var(--muted);margin-bottom:12px;line-height:1.7}
+button{
+  background:var(--red); color:#fff; border:none; padding:12px 18px;
+  border-radius:10px; cursor:pointer; margin:5px 5px 5px 0;
+  font-size:15px; font-family:inherit; font-weight:700;
 }
-button:hover { opacity: .85; }
-textarea, input {
-  width: 100%;
-  padding: 12px;
-  box-sizing: border-box;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  font-size: 16px;
+button:hover{opacity:.85}
+button:disabled{opacity:.4;cursor:default}
+button.ghost{background:#fff;color:var(--red);border:1.5px solid var(--red)}
+button.small{padding:8px 14px;font-size:13px}
+textarea,input{
+  width:100%; padding:12px; box-sizing:border-box; border:1px solid #ddd;
+  border-radius:10px; font-size:16px; font-family:inherit; outline:none; background:#fff;
+}
+textarea:focus,input:focus{border-color:var(--red)}
+label{font-size:13px;font-weight:700;display:block;margin:12px 0 6px}
+label small{color:var(--muted);font-weight:400}
+/* タブ */
+nav.tabs{
+  display:flex; gap:4px; padding:10px 8px; overflow-x:auto;
+  max-width:800px; margin:0 auto; -webkit-overflow-scrolling:touch;
+}
+nav.tabs button{
+  flex:1; min-width:76px; margin:0; background:#fff; color:var(--muted);
+  border:1.5px solid #eee; padding:10px 8px; font-size:13.5px; white-space:nowrap;
+}
+nav.tabs button.on{background:var(--red);color:#fff;border-color:var(--red)}
+.view{display:none}
+.view.on{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* レベル選択 */
+.levels{display:flex;gap:6px;margin:6px 0 14px}
+.levels button{flex:1;margin:0;padding:10px 4px;background:#fff;color:var(--muted);border:1.5px solid #eee;font-size:14px}
+.levels button.on{background:var(--red);color:#fff;border-color:var(--red)}
+/* チャット */
+.msgs{display:flex;flex-direction:column;gap:14px;margin:14px 0}
+.msg{max-width:88%;display:flex;flex-direction:column}
+.msg.user{align-self:flex-end}
+.msg.ai{align-self:flex-start}
+.bubble{padding:12px 15px;border-radius:16px;font-size:15px;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.msg.user .bubble{background:var(--red);color:#fff;border-bottom-right-radius:4px}
+.msg.ai .bubble{background:#fff;border:1.5px solid #f3d8dd;border-bottom-left-radius:4px}
+.msg .trjp{font-size:12.5px;color:var(--muted);margin-top:5px;padding:0 4px}
+.fix-card{margin-top:8px;background:#fff;border:1.5px dashed var(--red);border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.7}
+.fix-card .lbl{font-size:11px;font-weight:800;color:var(--red);letter-spacing:1px;margin:8px 0 3px}
+.fix-card .lbl:first-child{margin-top:0}
+.fix-card .ok-badge{display:inline-block;background:var(--green-soft);color:var(--green);font-size:11.5px;font-weight:700;border-radius:8px;padding:3px 9px;margin-top:6px}
+.fix-card del{color:#999}
+.fix-card ins{color:var(--red);text-decoration:none;font-weight:700}
+.wordchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.wordchips span{background:var(--red-soft);color:var(--red-dark);font-size:12px;border-radius:8px;padding:4px 9px;font-weight:700}
+.typing{display:flex;gap:4px;padding:14px 16px;background:#fff;border-radius:16px;border:1.5px solid #f3d8dd;align-self:flex-start}
+.typing i{width:7px;height:7px;border-radius:50%;background:var(--red);animation:bl 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bl{0%,100%{opacity:.25}50%{opacity:1}}
+.inputrow{display:flex;gap:8px;align-items:flex-end}
+.inputrow textarea{flex:1;resize:none;height:48px;max-height:130px}
+.inputrow button{height:48px;padding:0 20px;margin:0}
+.notice{background:#fff;border:1.5px solid var(--red);border-radius:12px;padding:14px;font-size:13.5px;line-height:1.8;margin-bottom:12px}
+.notice b{color:var(--red)}
+.empty{text-align:center;color:var(--muted);font-size:13.5px;padding:22px 8px;line-height:1.9}
+/* 翻訳 */
+.dirrow{display:flex;gap:6px;margin-bottom:6px}
+.dirrow button{flex:1;margin:0;background:#fff;color:var(--muted);border:1.5px solid #eee;padding:10px 4px;font-size:14px}
+.dirrow button.on{background:var(--red);color:#fff;border-color:var(--red)}
+#transResult{margin-top:14px}
+#transResult .main{font-size:17px;font-weight:700;line-height:1.6}
+#transResult .notes{font-size:13.5px;color:var(--muted);white-space:pre-wrap;margin-top:8px;line-height:1.8}
+/* 履歴・復習 */
+.item{display:flex;align-items:center;gap:12px;background:#fff;border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;margin-bottom:9px}
+.item .t{font-weight:700;font-size:14.5px;line-height:1.5;word-break:break-word}
+.item .s{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.5}
+.item .del{margin-left:auto;border:none;background:var(--red-soft);color:var(--red);width:34px;height:34px;border-radius:10px;font-size:14px;flex:none}
+.flash{min-height:220px;background:#fff;border-radius:20px;box-shadow:var(--shadow);border-top:6px solid var(--red);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;cursor:pointer;user-select:none}
+.flash .lang{font-size:11px;font-weight:800;color:var(--red);letter-spacing:2px}
+.flash .word{font-size:22px;font-weight:700;line-height:1.5;word-break:break-word}
+.flash.tr .word{color:var(--red)}
+.flash .hint{font-size:12px;color:var(--muted)}
+.graderow{display:flex;gap:12px;margin-top:14px}
+.graderow button{flex:1;margin:0}
+.subtabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.subtabs button{margin:0;background:#fff;color:var(--muted);border:1.5px solid #eee;font-size:13px;padding:8px 12px}
+.subtabs button.on{background:var(--red);color:#fff;border-color:var(--red)}
+.status-ok{color:var(--green);font-size:13px;font-weight:700}
+@media (min-width:768px){
+  main{padding:24px}
+  .msg{max-width:72%}
+  header h1{font-size:26px}
 }
 </style>
 </head>
 <body>
+
 <header>
   <h1>🇹🇷 Türkçe Companion</h1>
   <p>あなたのトルコ語学習パートナー</p>
 </header>
 
+<nav class="tabs">
+  <button class="tab on" data-v="home">ホーム</button>
+  <button class="tab" data-v="chat">AI会話</button>
+  <button class="tab" data-v="trans">翻訳</button>
+  <button class="tab" data-v="hist">学習履歴</button>
+  <button class="tab" data-v="conf">設定</button>
+</nav>
+
 <main>
-  <div class="card">
-    <h2>今日のトルコ語</h2>
-    <p>毎日少しずつ、自然なトルコ語を身につけよう。</p>
-    <button onclick="showLesson()">今日の表現</button>
-    <p id="lesson"></p>
-  </div>
+  <!-- ============ ホーム（既存機能を維持） ============ -->
+  <section class="view on" id="v-home">
+    <div class="card">
+      <h2>今日のトルコ語</h2>
+      <p class="desc">毎日少しずつ、自然なトルコ語を身につけよう。</p>
+      <button onclick="showLesson()">今日の表現</button>
+      <p id="lesson"></p>
+    </div>
 
-  <div class="card">
-    <h2>瞬間作文</h2>
-    <p>私はトルコ語を勉強しています。</p>
-    <input id="answer" placeholder="トルコ語で入力">
-    <button onclick="checkAnswer()">答え合わせ</button>
-    <p id="result"></p>
-  </div>
+    <div class="card">
+      <h2>瞬間作文</h2>
+      <p class="desc">私はトルコ語を勉強しています。</p>
+      <input id="answer" placeholder="トルコ語で入力">
+      <button onclick="checkAnswer()">答え合わせ</button>
+      <p id="result"></p>
+    </div>
 
-  <div class="card">
-    <h2>トルコ語の発音</h2>
-    <input id="speech" placeholder="読み上げたいトルコ語">
-    <button onclick="speak()">読み上げ</button>
-  </div>
+    <div class="card">
+      <h2>トルコ語の発音</h2>
+      <p class="desc">入力したトルコ語を読み上げます。</p>
+      <input id="speech" placeholder="読み上げたいトルコ語">
+      <button onclick="speak()">読み上げ</button>
+    </div>
+  </section>
+
+  <!-- ============ AI会話 ============ -->
+  <section class="view" id="v-chat">
+    <div class="card">
+      <h2>AIトルコ語会話</h2>
+      <div class="levels" id="levels">
+        <button data-l="A1" class="on">A1</button>
+        <button data-l="A2">A2</button>
+        <button data-l="B1">B1</button>
+        <button data-l="B2">B2</button>
+      </div>
+      <div id="backendNotice" class="notice" style="display:none">
+        <b>AIバックエンドが未設定です。</b><br>
+        実際にAIと会話するには、設定タブでご自身がデプロイしたAPIプロキシ（Cloudflare Worker）のURLを入力してください。APIキーをブラウザ側に置く必要はありません。
+        <div style="margin-top:10px"><button class="small" onclick="switchView('conf')">設定を開く</button></div>
+      </div>
+      <div class="msgs" id="msgs"></div>
+      <div class="empty" id="chatEmpty">
+        日本語でもトルコ語でも自由に入力できます。<br>AIはレベルに合わせたトルコ語で返答し、間違いを日本語で解説します。
+      </div>
+      <div class="inputrow">
+        <textarea id="chatInput" placeholder="日本語またはトルコ語で入力…" rows="1"></textarea>
+        <button id="btnSend">送信</button>
+      </div>
+      <div style="margin-top:10px"><button class="ghost small" id="btnClearChat">会話を新しくする</button></div>
+    </div>
+  </section>
+
+  <!-- ============ 翻訳 ============ -->
+  <section class="view" id="v-trans">
+    <div class="card">
+      <h2>翻訳</h2>
+      <div class="dirrow" id="dirRow">
+        <button data-d="auto" class="on">自動判定</button>
+        <button data-d="ja2tr">日本語 → トルコ語</button>
+        <button data-d="tr2ja">トルコ語 → 日本語</button>
+      </div>
+      <textarea id="transInput" style="height:110px" placeholder="翻訳したい文章を入力"></textarea>
+      <button id="btnTrans" style="margin-top:12px">翻訳する</button>
+      <div id="transResult"></div>
+    </div>
+  </section>
+
+  <!-- ============ 学習履歴 ============ -->
+  <section class="view" id="v-hist">
+    <div class="card">
+      <h2>学習履歴</h2>
+      <div class="subtabs" id="histTabs">
+        <button data-h="chat" class="on">会話履歴</button>
+        <button data-h="mistakes">間違えた文法</button>
+        <button data-h="words">学んだ単語</button>
+        <button data-h="review">復習</button>
+      </div>
+      <div id="histBody"></div>
+    </div>
+  </section>
+
+  <!-- ============ 設定 ============ -->
+  <section class="view" id="v-conf">
+    <div class="card">
+      <h2>AI接続設定</h2>
+      <p class="desc">
+        このアプリはAPIキーを一切保存しません。AIとの通信は、あなたがデプロイしたAPIプロキシ（<code>backend/</code> フォルダのCloudflare Worker）経由で行われます。READMEの手順でデプロイし、発行されたURLを入力してください。
+      </p>
+      <label>APIプロキシURL <small>（例: https://turkish-ai.あなた名前.workers.dev）</small></label>
+      <input id="confProxy" placeholder="https://xxxx.workers.dev" autocomplete="off">
+      <label>会話レベル</label>
+      <div class="levels" id="confLevels"></div>
+      <button id="btnSaveConf" style="margin-top:14px">保存</button>
+      <span id="confMsg" class="status-ok" style="display:none;margin-left:10px">保存しました</span>
+    </div>
+    <div class="card">
+      <h2>データ管理</h2>
+      <p class="desc">会話履歴・間違えた文法・学んだ単語は、この端末のブラウザ（localStorage）に保存されます。</p>
+      <button class="ghost small" id="btnClearAll">すべての学習データを削除</button>
+    </div>
+  </section>
 </main>
 
 <script>
+"use strict";
+/* ============================================================
+   Türkçe Companion — AI拡張版
+   モジュール構成:
+   1) Store  : localStorage 永続化（履歴・単語・間違い・設定）
+   2) AI     : APIプロキシ呼び出し（キーは保持しない）
+   3) Chat   : AI会話（文脈記憶・文法訂正カード）
+   4) Trans  : 双方向翻訳
+   5) History: 学習履歴・復習フラッシュカード
+   6) App    : タブ切替・初期化（既存3機能を維持）
+============================================================ */
+
+/* ---------- 既存機能（元サイトからそのまま維持） ---------- */
 const lessons = [
   ["Merhaba!", "こんにちは！"],
   ["Nasılsın?", "元気？"],
@@ -111,6 +286,510 @@ function speak() {
   utterance.rate = 0.85;
   speechSynthesis.speak(utterance);
 }
+
+/* ---------- 1) Store ---------- */
+const Store = {
+  NS: "tc_v2_",
+  get(k, def){
+    try{ const v = localStorage.getItem(this.NS + k); return v ? JSON.parse(v) : def; }
+    catch(e){ return def; }
+  },
+  set(k, v){ localStorage.setItem(this.NS + k, JSON.stringify(v)); },
+  push(k, item){
+    const arr = this.get(k, []);
+    arr.push(item);
+    this.set(k, arr);
+    return arr;
+  },
+  removeAt(k, idx){
+    const arr = this.get(k, []);
+    arr.splice(idx, 1);
+    this.set(k, arr);
+  },
+  clearAll(){ ["chat","mistakes","words","conf"].forEach(k => localStorage.removeItem(this.NS + k)); }
+};
+
+/* ---------- 2) AI 呼び出し（プロキシ経由・キー非保持） ---------- */
+const AI = {
+  configured(){ return !!Store.get("conf", {}).proxy; },
+  proxy(){ return (Store.get("conf", {}).proxy || "").replace(/\/+$/, ""); },
+  level(){ return Store.get("conf", {}).level || "A1"; },
+
+  async chat(messages){
+    if(!this.configured()) throw new Error("AIバックエンドが未設定です。設定タブでプロキシURLを保存してください。");
+    let res;
+    try{
+      res = await fetch(this.proxy() + "/api/chat", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ level: this.level(), messages })
+      });
+    }catch(e){
+      throw new Error("プロキシに接続できません。URLとWorkerの起動を確認してください。");
+    }
+    if(!res.ok){
+      let d = "";
+      try{ d = (await res.json()).error || ""; }catch(e){}
+      throw new Error("APIエラー (" + res.status + ") " + d);
+    }
+    const data = await res.json();
+    return {
+      reply: data.reply || "",
+      replyJp: data.reply_jp || "",
+      correction: data.correction || null,
+      original: data.original || null,
+      reasonJp: data.reason_jp || "",
+      alternativesOk: !!data.alternatives_ok,
+      newWords: Array.isArray(data.new_words) ? data.new_words : []
+    };
+  },
+
+  async translate(text, dir){
+    if(!this.configured()) throw new Error("AIバックエンドが未設定です。設定タブでプロキシURLを保存してください。");
+    let res;
+    try{
+      res = await fetch(this.proxy() + "/api/translate", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ text, direction: dir, level: this.level() })
+      });
+    }catch(e){
+      throw new Error("プロキシに接続できません。URLとWorkerの起動を確認してください。");
+    }
+    if(!res.ok){
+      let d = "";
+      try{ d = (await res.json()).error || ""; }catch(e){}
+      throw new Error("APIエラー (" + res.status + ") " + d);
+    }
+    return res.json();
+  }
+};
+
+/* ---------- 3) AI会話 ---------- */
+const Chat = {
+  busy: false,
+  msgsEl: document.getElementById("msgs"),
+  emptyEl: document.getElementById("chatEmpty"),
+
+  history(){ return Store.get("chat", []); },
+
+  refreshNotice(){
+    document.getElementById("backendNotice").style.display = AI.configured() ? "none" : "block";
+  },
+
+  renderAll(){
+    this.msgsEl.innerHTML = "";
+    this.history().forEach(m => this.renderMsg(m, false));
+    this.refreshEmpty();
+  },
+  refreshEmpty(){
+    this.emptyEl.style.display = this.msgsEl.children.length ? "none" : "block";
+  },
+
+  renderMsg(m, persist){
+    const wrap = document.createElement("div");
+    if(m.role === "user"){
+      wrap.className = "msg user";
+      const b = document.createElement("div");
+      b.className = "bubble";
+      b.textContent = m.content;
+      wrap.appendChild(b);
+    }else{
+      wrap.className = "msg ai";
+      const b = document.createElement("div");
+      b.className = "bubble";
+      b.textContent = m.reply;
+      wrap.appendChild(b);
+      if(m.replyJp){
+        const tr = document.createElement("div");
+        tr.className = "trjp";
+        tr.textContent = "訳: " + m.replyJp;
+        wrap.appendChild(tr);
+      }
+      if(m.correction){
+        wrap.appendChild(this.buildFixCard(m));
+      }
+      if(m.newWords && m.newWords.length){
+        const chips = document.createElement("div");
+        chips.className = "wordchips";
+        m.newWords.forEach(w => {
+          const s = document.createElement("span");
+          s.textContent = w.tr + " = " + w.jp;
+          chips.appendChild(s);
+        });
+        wrap.appendChild(chips);
+      }
+    }
+    this.msgsEl.appendChild(wrap);
+    this.refreshEmpty();
+    if(persist) this.scrollBottom();
+  },
+
+  buildFixCard(m){
+    const fc = document.createElement("div");
+    fc.className = "fix-card";
+    if(m.alternativesOk){
+      const badge = document.createElement("span");
+      badge.className = "ok-badge";
+      badge.textContent = "文法的に正しい別の表現として認めます";
+      fc.appendChild(badge);
+    }else{
+      const o = document.createElement("div");
+      o.innerHTML = '<div class="lbl">あなたの文</div>';
+      const ov = document.createElement("div");
+      ov.appendChild(document.createElement("del")).textContent = m.original || "";
+      o.appendChild(ov);
+      const c = document.createElement("div");
+      c.innerHTML = '<div class="lbl">自然な表現</div>';
+      const cv = document.createElement("div");
+      cv.appendChild(document.createElement("ins")).textContent = m.correction;
+      c.appendChild(cv);
+      const r = document.createElement("div");
+      r.innerHTML = '<div class="lbl">解説</div>';
+      const rv = document.createElement("div");
+      rv.textContent = m.reasonJp || "";
+      r.appendChild(rv);
+      fc.appendChild(o); fc.appendChild(c); fc.appendChild(r);
+    }
+    const btn = document.createElement("button");
+    btn.className = "ghost small";
+    btn.style.marginTop = "10px";
+    btn.textContent = "この表現を単語帳に保存";
+    btn.onclick = () => History.addWord(m.correction, m.reasonJp || (m.replyJp || ""), btn);
+    fc.appendChild(btn);
+    return fc;
+  },
+
+  scrollBottom(){
+    window.scrollTo({ top: document.body.scrollHeight, behavior:"smooth" });
+  },
+
+  async send(){
+    if(this.busy) return;
+    const inputEl = document.getElementById("chatInput");
+    const text = inputEl.value.trim();
+    if(!text) return;
+    if(!AI.configured()){ alert("先に設定タブでAPIプロキシURLを保存してください。"); return; }
+
+    inputEl.value = ""; inputEl.style.height = "48px";
+
+    const hist = this.history();
+    hist.push({ role:"user", content:text });
+    Store.set("chat", hist);
+    this.renderMsg({ role:"user", content:text });
+    this.scrollBottom();
+
+    // 文脈記憶: 直近20件 + システム相当の最初のユーザ文脈を送る
+    const context = hist.slice(-20).map(m =>
+      m.role === "user"
+        ? { role:"user", content:m.content }
+        : { role:"assistant", content: JSON.stringify({
+            reply:m.reply, correction:m.correction, reason_jp:m.reasonJp,
+            alternatives_ok:!!m.alternativesOk, new_words:m.newWords || []
+          }) }
+    );
+
+    this.busy = true;
+    document.getElementById("btnSend").disabled = true;
+    const typing = document.createElement("div");
+    typing.className = "typing";
+    typing.innerHTML = "<i></i><i></i><i></i>";
+    this.msgsEl.appendChild(typing);
+    this.scrollBottom();
+
+    try{
+      const out = await AI.chat(context);
+      typing.remove();
+      const aiMsg = {
+        role:"assistant", reply: out.reply, replyJp: out.replyJp,
+        correction: out.correction, original: out.original,
+        reasonJp: out.reasonJp, alternativesOk: out.alternativesOk,
+        newWords: out.newWords
+      };
+      const h2 = this.history();
+      h2.push(aiMsg);
+      Store.set("chat", h2);
+      this.renderMsg(aiMsg);
+
+      // 間違えた文法を自動記録
+      if(out.correction && !out.alternativesOk){
+        Store.push("mistakes", {
+          original: out.original || "", corrected: out.correction,
+          reason: out.reasonJp || "", ts: Date.now()
+        });
+      }
+      // 新しい単語を自動記録
+      (out.newWords || []).forEach(w => {
+        const words = Store.get("words", []);
+        if(!words.some(x => x.tr === w.tr)) Store.push("words", { tr:w.tr, jp:w.jp || "", ts: Date.now() });
+      });
+    }catch(err){
+      typing.remove();
+      this.renderMsg({ role:"assistant", reply:"⚠️ " + err.message });
+    }finally{
+      this.busy = false;
+      document.getElementById("btnSend").disabled = false;
+      this.scrollBottom();
+    }
+  },
+
+  clear(){
+    if(!confirm("会話履歴を削除して新しい会話を始めますか？（単語帳・間違い記録は残ります）")) return;
+    Store.set("chat", []);
+    this.renderAll();
+  }
+};
+
+/* ---------- 4) 翻訳 ---------- */
+const Trans = {
+  dir: "auto",
+  async run(){
+    const text = document.getElementById("transInput").value.trim();
+    if(!text){ alert("翻訳する文章を入力してください。"); return; }
+    if(!AI.configured()){ alert("先に設定タブでAPIプロキシURLを保存してください。"); return; }
+    const btn = document.getElementById("btnTrans");
+    btn.disabled = true; btn.textContent = "翻訳中…";
+    const out = document.getElementById("transResult");
+    out.innerHTML = "";
+    try{
+      const r = await AI.translate(text, this.dir);
+      const detected = r.detected ? "（判定: " + (r.detected === "ja" ? "日本語" : "トルコ語") + "）" : "";
+      out.innerHTML = '<div class="main"></div><div class="notes"></div>';
+      out.querySelector(".main").textContent = (r.translation || "") + " " + detected;
+      out.querySelector(".notes").textContent = r.notes || "";
+      // トルコ語の訳結果は単語帳に保存可能
+      if(r.translation && r.detected !== "ja"){
+        const save = document.createElement("button");
+        save.className = "ghost small";
+        save.style.marginTop = "10px";
+        save.textContent = "この表現を単語帳に保存";
+        save.onclick = () => History.addWord(r.translation, (r.notes || "").split("\n")[0], save);
+        out.appendChild(save);
+      }
+    }catch(err){
+      out.innerHTML = '<div class="empty">⚠️ ' + err.message + '</div>';
+    }finally{
+      btn.disabled = false; btn.textContent = "翻訳する";
+    }
+  }
+};
+
+/* ---------- 5) 学習履歴・復習 ---------- */
+const History = {
+  tab: "chat",
+  deck: [], idx: 0, revealed: false, known: 0, again: 0,
+
+  addWord(tr, jp, btn){
+    if(!tr) return;
+    const words = Store.get("words", []);
+    if(words.some(w => w.tr === tr)){ if(btn){ btn.textContent = "保存済みです"; btn.disabled = true; } return; }
+    Store.push("words", { tr, jp: jp || "", ts: Date.now() });
+    if(btn){ btn.textContent = "保存しました ✓"; btn.disabled = true; }
+  },
+
+  render(){
+    const body = document.getElementById("histBody");
+    body.innerHTML = "";
+    if(this.tab === "review"){ this.renderReview(body); return; }
+    const key = this.tab;
+    const list = Store.get(key, []).slice().reverse();
+    if(!list.length){
+      body.innerHTML = '<div class="empty">データはまだありません。</div>';
+      return;
+    }
+    list.forEach((item, ridx) => {
+      const idx = list.length - 1 - ridx;
+      const div = document.createElement("div");
+      div.className = "item";
+      const txt = document.createElement("div");
+      if(key === "chat"){
+        if(item.role === "user"){ txt.innerHTML = '<div class="t"></div>'; txt.querySelector(".t").textContent = item.content; }
+        else{
+          txt.innerHTML = '<div class="t"></div><div class="s"></div>';
+          txt.querySelector(".t").textContent = item.reply || "";
+          txt.querySelector(".s").textContent = item.replyJp || "";
+        }
+      }else if(key === "mistakes"){
+        txt.innerHTML = '<div class="t"></div><div class="s"></div>';
+        txt.querySelector(".t").innerHTML = "";
+        const del0 = document.createElement("del"); del0.textContent = item.original;
+        const ins0 = document.createElement("ins"); ins0.textContent = item.corrected; ins0.style.cssText="color:var(--red);font-weight:700";
+        const tw = txt.querySelector(".t");
+        tw.appendChild(del0); tw.appendChild(document.createTextNode(" → ")); tw.appendChild(ins0);
+        txt.querySelector(".s").textContent = item.reason || "";
+      }else{ // words
+        txt.innerHTML = '<div class="t"></div><div class="s"></div>';
+        txt.querySelector(".t").textContent = item.tr;
+        txt.querySelector(".s").textContent = item.jp || "";
+      }
+      const del = document.createElement("button");
+      del.className = "del"; del.textContent = "🗑";
+      del.onclick = () => { Store.removeAt(key, idx); this.render(); };
+      div.appendChild(txt); div.appendChild(del);
+      body.appendChild(div);
+    });
+  },
+
+  renderReview(body){
+    const words = Store.get("words", []);
+    const mistakes = Store.get("mistakes", []);
+    if(this.deck.length && this.idx <= this.deck.length){
+      // フラッシュカード進行中
+      body.innerHTML = "";
+      if(this.idx >= this.deck.length){
+        body.innerHTML = '<div class="empty"><b>復習完了！</b><br>わかった: ' + this.known + '件 ／ もう一度: ' + this.again + '件</div>' +
+          '<button id="btnReRestart">もう一度復習する</button><button class="ghost" id="btnReBack">一覧に戻る</button>';
+        body.querySelector("#btnReRestart").onclick = () => this.startReview();
+        body.querySelector("#btnReBack").onclick = () => { this.deck = []; this.render(); };
+        return;
+      }
+      const card = this.deck[this.idx];
+      body.innerHTML =
+        '<div style="font-size:12.5px;color:var(--muted);margin-bottom:8px" id="fprog"></div>' +
+        '<div class="flash' + (this.revealed ? " tr" : "") + '" id="fcard">' +
+        '<div class="lang">' + (this.revealed ? "TÜRKÇE" : "日本語") + '</div>' +
+        '<div class="word"></div><div class="hint"></div></div>' +
+        '<div class="graderow" style="display:' + (this.revealed ? "flex" : "none") + '">' +
+        '<button class="ghost" id="fAgain">もう一度</button><button id="fKnown">わかった</button></div>';
+      body.querySelector("#fprog").textContent = (this.idx + 1) + " / " + this.deck.length;
+      body.querySelector(".word").textContent = this.revealed ? card.tr : (card.jp || card.tr);
+      body.querySelector(".hint").textContent = this.revealed ? (card.jp || "") : "タップしてトルコ語の答えを見る";
+      body.querySelector("#fcard").onclick = () => { this.revealed = true; this.render(); };
+      body.querySelector("#fKnown").onclick = () => this.grade(true);
+      body.querySelector("#fAgain").onclick = () => this.grade(false);
+      return;
+    }
+    // 一覧
+    body.innerHTML = '<p class="desc">単語帳 ' + words.length + '件・間違い記録 ' + mistakes.length + '件から復習できます。</p>';
+    if(!words.length && !mistakes.length){
+      body.innerHTML += '<div class="empty">AI会話や翻訳で保存した表現がここに表示されます。</div>';
+      return;
+    }
+    if(words.length){
+      const b = document.createElement("button");
+      b.textContent = "単語帳から復習を開始（" + words.length + "件）";
+      b.onclick = () => this.startReview(Store.get("words", []).map(w => ({ tr:w.tr, jp:w.jp })));
+      body.appendChild(b);
+    }
+    if(mistakes.length){
+      const b2 = document.createElement("button");
+      b2.className = "ghost";
+      b2.textContent = "間違えた文を復習（" + mistakes.length + "件）";
+      b2.onclick = () => this.startReview(Store.get("mistakes", []).map(m => ({ tr:m.corrected, jp:m.reason })));
+      body.appendChild(b2);
+    }
+  },
+
+  startReview(cards){
+    this.deck = cards.slice().sort(() => Math.random() - .5);
+    this.idx = 0; this.revealed = false; this.known = 0; this.again = 0;
+    this.render();
+  },
+  grade(ok){
+    if(!this.revealed) return;
+    if(ok){ this.known++; }
+    else{ this.again++; this.deck.push(this.deck[this.idx]); }
+    this.idx++; this.revealed = false;
+    this.render();
+  }
+};
+
+/* ---------- 6) タブ切替・初期化 ---------- */
+function switchView(v){
+  document.querySelectorAll(".view").forEach(s => s.classList.toggle("on", s.id === "v-" + v));
+  document.querySelectorAll("nav.tabs button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
+  window.scrollTo(0, 0);
+  if(v === "chat") Chat.refreshNotice();
+  if(v === "hist") History.render();
+  if(v === "conf") fillConf();
+}
+
+function setLevelUI(level){
+  document.querySelectorAll("#levels button, #confLevels button").forEach(b =>
+    b.classList.toggle("on", b.dataset.l === level));
+}
+
+function init(){
+  // 設定の復元
+  const conf = Store.get("conf", { proxy:"", level:"A1" });
+  setLevelUI(conf.level || "A1");
+
+  // 既存機能のEnter対応
+  document.getElementById("answer").addEventListener("keydown", e => { if(e.key === "Enter") checkAnswer(); });
+  document.getElementById("speech").addEventListener("keydown", e => { if(e.key === "Enter") speak(); });
+
+  // タブ
+  document.querySelectorAll("nav.tabs button").forEach(b =>
+    b.addEventListener("click", () => switchView(b.dataset.v)));
+
+  // レベル
+  document.querySelectorAll("#levels button, #confLevels button").forEach(b =>
+    b.addEventListener("click", () => {
+      setLevelUI(b.dataset.l);
+      Store.set("conf", Object.assign(Store.get("conf", {}), { level: b.dataset.l }));
+    }));
+  // 設定タブ内レベル行の生成
+  document.getElementById("confLevels").innerHTML = document.getElementById("levels").innerHTML;
+  document.querySelectorAll("#confLevels button").forEach(b =>
+    b.addEventListener("click", () => {
+      setLevelUI(b.dataset.l);
+      Store.set("conf", Object.assign(Store.get("conf", {}), { level: b.dataset.l }));
+    }));
+
+  // チャット
+  document.getElementById("btnSend").addEventListener("click", () => Chat.send());
+  document.getElementById("btnClearChat").addEventListener("click", () => Chat.clear());
+  document.getElementById("chatInput").addEventListener("keydown", e => {
+    if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); Chat.send(); }
+  });
+  document.getElementById("chatInput").addEventListener("input", e => {
+    e.target.style.height = "48px";
+    e.target.style.height = Math.min(e.target.scrollHeight, 130) + "px";
+  });
+  Chat.renderAll();
+
+  // 翻訳
+  document.querySelectorAll("#dirRow button").forEach(b =>
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#dirRow button").forEach(x => x.classList.remove("on"));
+      b.classList.add("on");
+      Trans.dir = b.dataset.d;
+    }));
+  document.getElementById("btnTrans").addEventListener("click", () => Trans.run());
+
+  // 履歴
+  document.querySelectorAll("#histTabs button").forEach(b =>
+    b.addEventListener("click", () => {
+      document.querySelectorAll("#histTabs button").forEach(x => x.classList.remove("on"));
+      b.classList.add("on");
+      History.tab = b.dataset.h;
+      History.deck = []; History.idx = 0;
+      History.render();
+    }));
+
+  // 設定
+  document.getElementById("btnSaveConf").addEventListener("click", () => {
+    Store.set("conf", Object.assign(Store.get("conf", {}), { proxy: document.getElementById("confProxy").value.trim() }));
+    Chat.refreshNotice();
+    const m = document.getElementById("confMsg");
+    m.style.display = "inline";
+    setTimeout(() => m.style.display = "none", 2000);
+  });
+  document.getElementById("btnClearAll").addEventListener("click", () => {
+    if(!confirm("会話履歴・間違い記録・単語帳をすべて削除しますか？元に戻せません。")) return;
+    Store.clearAll();
+    Chat.renderAll();
+    alert("削除しました。");
+  });
+
+  fillConf();
+}
+function fillConf(){
+  const c = Store.get("conf", {});
+  document.getElementById("confProxy").value = c.proxy || "";
+  setLevelUI(c.level || "A1");
+}
+document.addEventListener("DOMContentLoaded", init);
 </script>
 </body>
 </html>
